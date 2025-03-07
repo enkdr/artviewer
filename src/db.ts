@@ -1,8 +1,9 @@
+// TODO sync/update
 import { openDB, IDBPDatabase } from 'idb';
-import { Artist, Artwork } from './types';
+import { Artist, Artwork, Gallery } from './types';
 
 const DB_NAME = 'ArtviewerDB';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 export async function initDB(): Promise<IDBPDatabase> {
     return openDB(DB_NAME, DB_VERSION, {
@@ -13,67 +14,68 @@ export async function initDB(): Promise<IDBPDatabase> {
             if (!db.objectStoreNames.contains('artworks')) {
                 db.createObjectStore('artworks', { keyPath: 'artworkId' });
             }
+            if (!db.objectStoreNames.contains('galleries')) {
+                db.createObjectStore('galleries', { keyPath: 'galleryId' });
+            }
         },
     });
 }
 
-export async function fetchAndStoreArtists(): Promise<void> {
+export async function fetchAndStoreData<T>(dataType: string, apiUrl: string, transformData: (data: any) => T[]): Promise<void> {
     try {
-
         const db = await initDB();
 
-        const existingArtists = await db.getAll('artists');
-        if (existingArtists.length > 0) {
-            console.log('Artists already stored');
+        // check if data already exists in 
+        const existingData = await db.getAll(dataType);
+        if (existingData.length > 0) {
+            console.log(`${dataType} already stored`);
             return;
         }
 
-        const response = await fetch('https://artsearcher.app/api/artists');
+        // fetch new data
+        const response = await fetch(apiUrl);
         const data = await response.json();
-        const artists: Artist[] = Object.values(data);
+        const transformedData = transformData(data);
 
-        const tx = db.transaction('artists', 'readwrite');
-        const store = tx.objectStore('artists');
+        // store data in IndexedDB
+        const tx = db.transaction(dataType, 'readwrite');
+        const store = tx.objectStore(dataType);
 
-        for (const artist of artists) {
-            await store.put(artist);
+        for (const item of transformedData) {
+            await store.put(item);
         }
 
         await tx.done;
-        console.log('Artists stored');
+        console.log(`${dataType} stored successfully`);
     } catch (error) {
-        console.error('Error fetching artists:', error);
+        console.error(`Error fetching ${dataType}:`, error);
     }
 }
 
-export async function fetchAndStoreArtworks() {
-    try {
-
-        const db = await initDB();
-
-        const existingArtworks = await db.getAll('artworks');
-        if (existingArtworks.length > 0) {
-            console.log('Artworks already stored');
-            return;
-        }
-
-        const response = await fetch('https://artsearcher.app/api/artworks_all');
-        const data = await response.json();
-        const artworks: Artwork[] = Object.values(data);
-
-        const tx = db.transaction('artworks', 'readwrite');
-        const store = tx.objectStore('artworks');
-
-        for (const artwork of artworks) {
-            await store.put(artwork);
-        }
-
-        await tx.done;
-        console.log('Artworks saved to IndexedDB');
-    } catch (error) {
-        console.error('Error fetching artworks:', error);
-    }
+export function fetchAndStoreArtists(): Promise<void> {
+    return fetchAndStoreData<Artist>(
+        'artists',
+        'https://artsearcher.app/api/artists',
+        (data) => Object.values(data) as Artist[]
+    );
 }
+
+export function fetchAndStoreArtworks(): Promise<void> {
+    return fetchAndStoreData<Artwork>(
+        'artworks',
+        'https://artsearcher.app/api/artworks_all',
+        (data) => Object.values(data) as Artwork[]
+    );
+}
+
+export function fetchAndStoreGalleries(): Promise<void> {
+    return fetchAndStoreData<Gallery>(
+        'galleries',
+        'https://artsearcher.app/api/galleries',
+        (data) => Object.values(data) as Gallery[]
+    );
+}
+
 
 export async function getAllArtists(): Promise<Artist[]> {
     const db = await initDB();

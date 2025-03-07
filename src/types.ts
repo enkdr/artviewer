@@ -29,3 +29,12 @@ export interface Artwork {
     countryId: string;
     countryTitle: string;
 }
+
+export interface Gallery {
+    galleryId: string;
+    galleryTitle: string;
+    galleryAddress: string;
+    galleryLink: string;
+    galleryLat: string;
+    galleryLon: string;
+}
