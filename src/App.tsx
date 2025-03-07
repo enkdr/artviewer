@@ -13,6 +13,8 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
+  // initialise IndexedDB and fetch data 
+  // TODO sync/update
   useEffect(() => {
     fetchAndStoreArtists();
     fetchAndStoreArtworks();
@@ -43,7 +45,6 @@ function App() {
           <h2>ArtViewer</h2>
           <input className="search-input" type="text" placeholder="Search Bar" />
           <div>
-            <h1>Artists List</h1>
 
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
