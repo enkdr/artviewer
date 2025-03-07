@@ -2,7 +2,7 @@ import { openDB, IDBPDatabase } from 'idb';
 import { Artist, Artwork } from './types';
 
 const DB_NAME = 'ArtviewerDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export async function initDB(): Promise<IDBPDatabase> {
     return openDB(DB_NAME, DB_VERSION, {
@@ -20,11 +20,18 @@ export async function initDB(): Promise<IDBPDatabase> {
 export async function fetchAndStoreArtists(): Promise<void> {
     try {
 
+        const db = await initDB();
+
+        const existingArtists = await db.getAll('artists');
+        if (existingArtists.length > 0) {
+            console.log('Artists already stored');
+            return;
+        }
+
         const response = await fetch('https://artsearcher.app/api/artists');
         const data = await response.json();
         const artists: Artist[] = Object.values(data);
 
-        const db = await initDB();
         const tx = db.transaction('artists', 'readwrite');
         const store = tx.objectStore('artists');
 
@@ -41,11 +48,19 @@ export async function fetchAndStoreArtists(): Promise<void> {
 
 export async function fetchAndStoreArtworks() {
     try {
+
+        const db = await initDB();
+
+        const existingArtworks = await db.getAll('artworks');
+        if (existingArtworks.length > 0) {
+            console.log('Artworks already stored');
+            return;
+        }
+
         const response = await fetch('https://artsearcher.app/api/artworks_all');
         const data = await response.json();
         const artworks: Artwork[] = Object.values(data);
 
-        const db = await initDB();
         const tx = db.transaction('artworks', 'readwrite');
         const store = tx.objectStore('artworks');
 
