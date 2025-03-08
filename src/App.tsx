@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Map from './components/Map'
-import { fetchAndStoreArtists, fetchAndStoreArtworks, fetchAndStoreGalleries, getAllArtists, getAllGalleries, getArtworksByArtist, fetchAndStoreEntities } from './db'
+import { getAllArtists, getAllGalleries, getArtworksByArtist, fetchAndStoreEntities } from './db'
 import { Artist, Artwork } from './types'
 import { Loading } from './components/Loading'
 
@@ -22,10 +22,13 @@ function App() {
 
         await fetchAndStoreEntities();
 
+        // custom calls from UI to get from indexedDB
         const artistData = await getAllArtists();
         const gallerytData = await getAllGalleries();
+
         setArtists(artistData);
         setGalleries(gallerytData);
+
       } catch (error) {
         setError("Error fetching artists from IndexedDB");
       } finally {

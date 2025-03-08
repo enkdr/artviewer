@@ -1,25 +1,43 @@
 // TODO sync/update
 import { openDB, IDBPDatabase } from 'idb';
-import { Artist, Artwork, FetchConfig, Gallery } from './types';
+import { Artist, Artwork, EntityMeta, Gallery } from './types';
 
 const DB_NAME = 'ArtviewerDB';
 const DB_VERSION = 1;
 
+const fetchEntityData: EntityMeta<Artist | Artwork | Gallery>[] = [
+    {
+        key: 'artists',
+        keyPath: 'artistId',
+        url: 'https://artsearcher.app/api/artists',
+        transform: (data) => Object.values(data as Record<string, Artist>),
+    },
+    {
+        key: 'artworks',
+        keyPath: 'artworkId',
+        url: 'https://artsearcher.app/api/artworks_all',
+        transform: (data) => Object.values(data as Record<string, Artwork>),
+    },
+    {
+        key: 'galleries',
+        keyPath: 'galleryId',
+        url: 'https://artsearcher.app/api/galleries',
+        transform: (data) => Object.values(data as Record<string, Gallery>),
+    },
+];
+
 export async function initDB(): Promise<IDBPDatabase> {
     return openDB(DB_NAME, DB_VERSION, {
         upgrade(db) {
-            if (!db.objectStoreNames.contains('artists')) {
-                db.createObjectStore('artists', { keyPath: 'artistId' });
-            }
-            if (!db.objectStoreNames.contains('artworks')) {
-                db.createObjectStore('artworks', { keyPath: 'artworkId' });
-            }
-            if (!db.objectStoreNames.contains('galleries')) {
-                db.createObjectStore('galleries', { keyPath: 'galleryId' });
-            }
-        },
-    });
+            fetchEntityData.map((config) => {
+                if (!db.objectStoreNames.contains(config.key)) {
+                    db.createObjectStore(config.key, { keyPath: config.keyPath });
+                }
+            });
+        }
+    })
 }
+
 
 export async function fetchAndStoreData<T>(
     dataType: string,
@@ -59,57 +77,11 @@ export async function fetchAndStoreData<T>(
 }
 
 
-const fetchConfigs: FetchConfig<Artist | Artwork | Gallery>[] = [
-    {
-        key: 'artists',
-        keyPath: 'artistId',
-        url: 'https://artsearcher.app/api/artists',
-        transform: (data) => Object.values(data as Record<string, Artist>),
-    },
-    {
-        key: 'artworks',
-        keyPath: 'artworkId',
-        url: 'https://artsearcher.app/api/artworks_all',
-        transform: (data) => Object.values(data as Record<string, Artwork>),
-    },
-    {
-        key: 'galleries',
-        keyPath: 'galleryId',
-        url: 'https://artsearcher.app/api/galleries',
-        transform: (data) => Object.values(data as Record<string, Gallery>),
-    },
-];
-
 export function fetchAndStoreEntities(): Promise<void[]> {
-    return Promise.all(fetchConfigs.map(config => fetchAndStoreData<Artist | Artwork | Gallery>(config.key, config.url, config.transform)));
+    return Promise.all(fetchEntityData.map(config => fetchAndStoreData<Artist | Artwork | Gallery>(config.key, config.url, config.transform)));
 }
 
-
-export function fetchAndStoreArtists(): Promise<void> {
-    return fetchAndStoreData<Artist>(
-        'artists',
-        'https://artsearcher.app/api/artists',
-        (data) => Object.values(data) as Artist[]
-    );
-}
-
-export function fetchAndStoreArtworks(): Promise<void> {
-    return fetchAndStoreData<Artwork>(
-        'artworks',
-        'https://artsearcher.app/api/artworks_all',
-        (data) => Object.values(data) as Artwork[]
-    );
-}
-
-export function fetchAndStoreGalleries(): Promise<void> {
-    return fetchAndStoreData<Gallery>(
-        'galleries',
-        'https://artsearcher.app/api/galleries',
-        (data) => Object.values(data) as Gallery[]
-    );
-}
-
-// get from indexedDB
+// these are kind of custom calls from the UI
 
 export async function getAllArtists(): Promise<Artist[]> {
     const db = await initDB();
