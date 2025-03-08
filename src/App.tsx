@@ -42,9 +42,6 @@ function App() {
     fetchArtworks();
   }, []);
 
-
-  console.log(" :: artworks :: ", artworks)
-
   return (
     <>
       <div className="container">

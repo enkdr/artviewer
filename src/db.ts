@@ -3,7 +3,7 @@ import { openDB, IDBPDatabase } from 'idb';
 import { Artist, Artwork, Gallery } from './types';
 
 const DB_NAME = 'ArtviewerDB';
-const DB_VERSION = 3;
+const DB_VERSION = 1;
 
 export async function initDB(): Promise<IDBPDatabase> {
     return openDB(DB_NAME, DB_VERSION, {
