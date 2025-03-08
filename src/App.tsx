@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Map from './components/Map'
 import { getAllArtists, getAllGalleries, getArtworksByArtist, fetchAndStoreEntities } from './db'
-import { Artist, Artwork } from './types'
+import { Artist, Artwork, Gallery } from './types'
 import { Loading } from './components/Loading'
 
 
@@ -51,51 +51,45 @@ function App() {
 
   return (
     <>
-      <div className="container">
-        <button className="toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>{sidebarOpen ? "×" : "☰"}</button>
-        <div className={`sidebar ${sidebarOpen ? "open" : ""}`} id="sidebar">
+      <div className="outer-container">
+        <div className="inner-container">
+          <div className="left-section">
+            <div className="column">
+              {artists.length === 0 && !loading && !error ? (
+                <p>No artists found.</p>) : (
+                <select className='artist-select'>
+                  <option value="">Select an Artist</option>
+                  {artists.map((artist) => (
+                    <option key={artist.artistId} value={artist.artistId}>
+                      {artist.artistTitle}
+                    </option>
+                  ))}
+                </select>
 
-          <h2>ArtViewer</h2>
+              )}
+              {galleries.length === 0 && !loading && !error ? (
+                <p>No artists found.</p>) : (
+                <select className='artist-select'>
+                  <option value="">Select a Gallery</option>
+                  {galleries.map((gallery) => (
+                    <option key={gallery.galleryId} value={gallery.galleryId}>
+                      {gallery.galleryTitle}
+                    </option>
+                  ))}
+                </select>
+              )}
 
-          <input className="search-input" type="text" placeholder="Search" />
-
-          <div>
-            {loading && <Loading message='Loading artists' />}
-
-            {error && <p>{error}</p>}
-
-            {artists.length === 0 && !loading && !error ? (
-              <p>No artists found.</p>) : (
-              <select className='artist-select'>
-                <option value="">Select an Artist</option>
-                {artists.map((artist) => (
-                  <option key={artist.artistId} value={artist.artistId}>
-                    {artist.artistTitle}
-                  </option>
-                ))}
-              </select>
-            )}
-
-
-            {galleries.length === 0 && !loading && !error ? (
-              <p>No artists found.</p>) : (
-              <select className='artist-select'>
-                <option value="">Select a Gallery</option>
-                {galleries.map((gallery) => (
-                  <option key={gallery.galleryId} value={gallery.galleryId}>
-                    {gallery.galleryTitle}
-                  </option>
-                ))}
-              </select>
-            )}
-
+            </div>
+            <div className="column">Column 2</div>
           </div>
-
-        </div>
-        <div className="map-container">
-          <Map />
+          <div className="map-section">
+            <div className="map-placeholder">
+              <Map />
+            </div>
+          </div>
         </div>
       </div>
+
     </>
   )
 }
