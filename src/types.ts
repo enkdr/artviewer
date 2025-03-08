@@ -1,3 +1,13 @@
+type EntityTypes = 'artists' | 'artworks' | 'galleries';
+
+// keyPath is the key used to store the data in IndexedDB
+export interface FetchConfig<T> {
+    key: EntityTypes;
+    keyPath: string;
+    url: string;
+    transform: (data: unknown) => T[]
+}
+
 export interface Artist {
     artistId: string;
     artistTitle: string;

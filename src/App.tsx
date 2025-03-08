@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import './App.css'
 import Map from './components/Map'
-import { fetchAndStoreArtists, fetchAndStoreArtworks, fetchAndStoreGalleries, getAllArtists, getArtworksByArtist } from './db'
+import { fetchAndStoreArtists, fetchAndStoreArtworks, fetchAndStoreGalleries, getAllArtists, getAllGalleries, getArtworksByArtist, fetchAndStoreEntities } from './db'
 import { Artist, Artwork } from './types'
 import { Loading } from './components/Loading'
 
@@ -9,19 +9,23 @@ import { Loading } from './components/Loading'
 function App() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [artists, setArtists] = useState<Artist[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+
+  const [artists, setArtists] = useState<Artist[]>([])
+  const [galleries, setGalleries] = useState<Gallery[]>([])
 
   // initialise IndexedDB and fetch data OR pull from existing data
   useEffect(() => {
     const init = async () => {
       try {
-        await fetchAndStoreArtists();
-        await fetchAndStoreArtworks();
-        await fetchAndStoreGalleries();
+
+        await fetchAndStoreEntities();
+
         const artistData = await getAllArtists();
+        const gallerytData = await getAllGalleries();
         setArtists(artistData);
+        setGalleries(gallerytData);
       } catch (error) {
         setError("Error fetching artists from IndexedDB");
       } finally {
@@ -32,15 +36,15 @@ function App() {
   }, []);
 
 
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
+  // const [artworks, setArtworks] = useState<Artwork[]>([]);
 
-  useEffect(() => {
-    const fetchArtworks = async () => {
-      const data = await getArtworksByArtist('8m63wys32ywhe11');
-      setArtworks(data);
-    };
-    fetchArtworks();
-  }, []);
+  // useEffect(() => {
+  //   const fetchArtworks = async () => {
+  //     const data = await getArtworksByArtist('8m63wys32ywhe11');
+  //     setArtworks(data);
+  //   };
+  //   fetchArtworks();
+  // }, []);
 
   return (
     <>
@@ -60,7 +64,7 @@ function App() {
             {artists.length === 0 && !loading && !error ? (
               <p>No artists found.</p>) : (
               <select className='artist-select'>
-                <option value="">Select an artist</option>
+                <option value="">Select an Artist</option>
                 {artists.map((artist) => (
                   <option key={artist.artistId} value={artist.artistId}>
                     {artist.artistTitle}
@@ -68,6 +72,20 @@ function App() {
                 ))}
               </select>
             )}
+
+
+            {galleries.length === 0 && !loading && !error ? (
+              <p>No artists found.</p>) : (
+              <select className='artist-select'>
+                <option value="">Select a Gallery</option>
+                {galleries.map((gallery) => (
+                  <option key={gallery.galleryId} value={gallery.galleryId}>
+                    {gallery.galleryTitle}
+                  </option>
+                ))}
+              </select>
+            )}
+
           </div>
 
         </div>

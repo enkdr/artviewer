@@ -1,6 +1,6 @@
 // TODO sync/update
 import { openDB, IDBPDatabase } from 'idb';
-import { Artist, Artwork, Gallery } from './types';
+import { Artist, Artwork, FetchConfig, Gallery } from './types';
 
 const DB_NAME = 'ArtviewerDB';
 const DB_VERSION = 1;
@@ -21,23 +21,29 @@ export async function initDB(): Promise<IDBPDatabase> {
     });
 }
 
-export async function fetchAndStoreData<T>(dataType: string, apiUrl: string, transformData: (data: any) => T[]): Promise<void> {
+export async function fetchAndStoreData<T>(
+    dataType: string,
+    apiUrl: string,
+    transformData: (data: Record<string, T>) => T[]
+): Promise<void> {
     try {
         const db = await initDB();
 
-        // check if data already exists in 
         const existingData = await db.getAll(dataType);
         if (existingData.length > 0) {
             console.log(`${dataType} already stored`);
             return;
         }
 
-        // fetch new data
         const response = await fetch(apiUrl);
-        const data = await response.json();
-        const transformedData = transformData(data);
+        const rawData = await response.json();
 
-        // store data in IndexedDB
+        if (typeof rawData !== "object" || rawData === null) {
+            throw new Error(`Invalid data format for ${dataType}`);
+        }
+
+        const transformedData = transformData(rawData as Record<string, T>);
+
         const tx = db.transaction(dataType, 'readwrite');
         const store = tx.objectStore(dataType);
 
@@ -51,6 +57,33 @@ export async function fetchAndStoreData<T>(dataType: string, apiUrl: string, tra
         console.error(`Error fetching ${dataType}:`, error);
     }
 }
+
+
+const fetchConfigs: FetchConfig<Artist | Artwork | Gallery>[] = [
+    {
+        key: 'artists',
+        keyPath: 'artistId',
+        url: 'https://artsearcher.app/api/artists',
+        transform: (data) => Object.values(data as Record<string, Artist>),
+    },
+    {
+        key: 'artworks',
+        keyPath: 'artworkId',
+        url: 'https://artsearcher.app/api/artworks_all',
+        transform: (data) => Object.values(data as Record<string, Artwork>),
+    },
+    {
+        key: 'galleries',
+        keyPath: 'galleryId',
+        url: 'https://artsearcher.app/api/galleries',
+        transform: (data) => Object.values(data as Record<string, Gallery>),
+    },
+];
+
+export function fetchAndStoreEntities(): Promise<void[]> {
+    return Promise.all(fetchConfigs.map(config => fetchAndStoreData<Artist | Artwork | Gallery>(config.key, config.url, config.transform)));
+}
+
 
 export function fetchAndStoreArtists(): Promise<void> {
     return fetchAndStoreData<Artist>(
@@ -76,10 +109,16 @@ export function fetchAndStoreGalleries(): Promise<void> {
     );
 }
 
+// get from indexedDB
 
 export async function getAllArtists(): Promise<Artist[]> {
     const db = await initDB();
     return db.getAll('artists');
+}
+
+export async function getAllGalleries(): Promise<Gallery[]> {
+    const db = await initDB();
+    return db.getAll('galleries');
 }
 
 export async function getArtworksByArtist(artistId: string): Promise<Artwork[]> {
