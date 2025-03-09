@@ -76,16 +76,17 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data }) =
                 )}
             </div>
 
-            {selectedGalleryId && selectedGallery && (
-                <div className="selected-gallery-info">
-                    <h4><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
-                    <p>{selectedGallery.galleryAddress}</p>
-                    <p>{selectedGallery.countryTitle}</p>
-                </div>
-            )}
+
 
             {selectedGalleryId && (
                 <div className="artwork-list" ref={artworkListRef}>
+                    {selectedGalleryId && selectedGallery && (
+                        <div className="selected-gallery-info">
+                            <h4><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
+                            <p>{selectedGallery.galleryAddress}</p>
+                            <p>{selectedGallery.countryTitle}</p>
+                        </div>
+                    )}
                     {artworks.length === 0 ? (
                         <p>No artworks found for this gallery.</p>
                     ) : (
