@@ -46,7 +46,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
 
     return (
         <div>
-            <div className={`artist-list ${selectedArtistId ? "collapsed" : "full-height"}`} ref={artistListRef}>
+            <div className={`artist-list ${selectedArtistId ? "" : "full-height"}`} ref={artistListRef}>
                 <input
                     type="text"
                     placeholder="Search artists"

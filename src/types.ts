@@ -32,6 +32,9 @@ export interface Artwork {
     artworkGalleryLink: string;
     imageUrl: string;
     artistId: string; // This links to an artist
+    artistTitle: string;
+    artistFirstname: string;
+    artistLastname: string;
     galleryTitle: string;
     galleryAddress: string;
     galleryLink: string;
@@ -48,6 +51,8 @@ export interface Gallery {
     galleryLink: string;
     galleryLat: string;
     galleryLon: string;
+    countryId: string;
+    countryTitle: string;
 }
 
 export interface Country {

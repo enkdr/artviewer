@@ -105,3 +105,9 @@ export async function getArtworksByArtist(artistId: string): Promise<Artwork[]> 
     const allArtworks = await db.getAll('artworks');
     return allArtworks.filter(artwork => artwork.artistId === artistId);
 }
+
+export async function getArtworksByGallery(galleryId: string): Promise<Artwork[]> {
+    const db = await initDB();
+    const allArtworks = await db.getAll('artworks');
+    return allArtworks.filter(artwork => artwork.galleryId === galleryId);
+}
