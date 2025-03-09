@@ -52,7 +52,7 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data }) =
 
             {selectedGalleryId && selectedGallery ? (
                 <div className="selected-gallery-info">
-                    <Icon icon="home" onClick={() => setSelectedGalleryId(null)} />
+                    <div className="close-icon-right"><Icon icon="close" onClick={() => setSelectedGalleryId(null)} /> </div>
                     <h4><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
                     <p>{selectedGallery.galleryAddress}</p>
                     <p>{selectedGallery.countryTitle}</p>

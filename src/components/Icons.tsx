@@ -5,10 +5,12 @@ import { iconPaths } from '../types'
 interface IconProps {
     icon: keyof typeof iconPaths;
     onClick?: () => void;
+    size?: number;
+    className?: string;
 }
 
 
-export const Icon: React.FC<IconProps> = ({ icon, onClick }) => {
+export const Icon: React.FC<IconProps> = ({ icon, onClick, size = 24, className }) => {
 
     const paths = iconPaths[icon];
 
@@ -18,12 +20,24 @@ export const Icon: React.FC<IconProps> = ({ icon, onClick }) => {
     }
 
     return (
-        <svg onClick={onClick} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="32" height="32" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" stroke="currentColor">
+        <svg
+            className={className}
+            onClick={onClick}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            width={size}
+            height={size}
+            strokeWidth="1"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            stroke="currentColor"
+        >
             {paths.map((path, i) => (
                 <path key={i} d={path}></path>
             ))}
         </svg>
-    )
+    );
 }
 
 

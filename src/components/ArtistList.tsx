@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Artist, Artwork } from '../types';
-import { defaultProfileImage } from './Icons';
+import { defaultProfileImage, Icon } from './Icons';
 import { getArtworksByArtist } from '../db';
 
 interface ArtistListProps {
@@ -65,19 +65,28 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                         <div
                             key={artist.artistId}
                             className="artist-item"
-                            onClick={() => handleArtistClick(artist.artistId)}
                         >
-                            <div className="artist-image">
+                            <div className="artist-image" onClick={() => handleArtistClick(artist.artistId)}>
                                 {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
                                     <img src={artist.artistImageUrl} alt={artist.artistTitle} />
                                 ) : (
                                     <img src={defaultProfileImage} alt="Default profile" />
                                 )}
                             </div>
-                            <p className="artist-title">{artist.artistTitle}</p>
+                            <p className="artist-title" onClick={() => handleArtistClick(artist.artistId)}>
+                                {artist.artistTitle}
+                            </p>
+
+                            {/* Show close icon ONLY if this artist is currently selected */}
+                            {selectedArtistId === artist.artistId && (
+                                <div className="close-icon-right">
+                                    <Icon icon="close" onClick={() => setSelectedArtistId(null)} />
+                                </div>
+                            )}
                         </div>
                     ))
                 )}
+
             </div>
 
             {selectedArtistId && (
