@@ -39,17 +39,6 @@ function App() {
     init();
   }, []);
 
-
-  // const [artworks, setArtworks] = useState<Artwork[]>([]);
-
-  // useEffect(() => {
-  //   const fetchArtworks = async () => {
-  //     const data = await getArtworksByArtist('8m63wys32ywhe11');
-  //     setArtworks(data);
-  //   };
-  //   fetchArtworks();
-  // }, []);
-
   return (
     <>
       <div className="outer-container">

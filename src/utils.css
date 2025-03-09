@@ -4,23 +4,30 @@
     --light-blue: #809fff;
     --lightest-blue: #bfcfff;
     --off-white: #f8f8f8;
+    --white: #fff;
     --dark-grey: #333;
+    --medium--grey: #666;
 }
 
 html {
-    font-size: 15px;
+    font-size: 14px;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Trebuchet MS', sans-serif;
+    font-family: Verdana, sans-serif;
 
 }
 
 ul {
     list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--light-blue);
 }
 
 .loading-message {

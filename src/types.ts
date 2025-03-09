@@ -29,6 +29,7 @@ export interface Artwork {
     artworkMedium: string;
     artworkStyle: string;
     artworkDimensions: string;
+    artworkGalleryLink: string;
     imageUrl: string;
     artistId: string; // This links to an artist
     galleryTitle: string;

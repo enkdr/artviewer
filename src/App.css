@@ -93,17 +93,25 @@
   margin-bottom: 0.75rem;
 }
 
-.artist-list {
-  min-width: 22rem;
+.artist-list,
+.artwork-list {
+  margin-bottom: 2rem;
+  min-width: 24rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   max-height: 18.75rem;
-  border: 1px solid var(--dark-grey);
+  border: 1px solid var(--light-blue);
   padding: 1rem;
   border-radius: 0.4rem;
   scrollbar-width: none;
   position: relative;
+}
+
+.artwork-list {
+  align-items: center;
+  max-height: 38rem;
+  border: none;
 }
 
 .artist-list::-webkit-scrollbar {
@@ -111,9 +119,16 @@
 }
 
 .artist-item {
+  padding: .5rem;
   display: flex;
   align-items: center;
   margin-bottom: 0.625rem;
+  border-radius: .5rem;
+}
+
+.artist-item:hover {
+  background-color: var(--white);
+  cursor: pointer;
 }
 
 .artist-image {
@@ -129,6 +144,85 @@
   height: 100%;
   object-fit: cover;
 }
+
+.artwork-section {
+  margin-top: 2rem;
+}
+
+.artwork-list {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.4rem;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: auto;
+  width: 100%;
+
+}
+
+.artwork-card {
+  flex-shrink: 0;
+  width: 22rem;
+  background-color: var(--off-white);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artwork-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+
+.artwork-image-container {
+  width: 100%;
+  height: 15rem;
+  overflow: hidden;
+}
+
+.artwork-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artwork-info {
+  padding: 1rem;
+  text-align: left;
+}
+
+.artwork-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--darkest-blue);
+  margin: 0.5rem 0;
+}
+
+.artwork-year,
+.artwork-medium,
+.artwork-style,
+.artwork-dimensions {
+  font-size: 1rem;
+  margin: 0.25rem 0;
+  color: var(--dark-grey);
+}
+
+.gallery-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.gallery-link:hover {
+  color: var(--darkest-blue);
+}
+
 
 @media (max-width: 960px) {
   .left-section {
