@@ -65,27 +65,34 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                         <div
                             key={artist.artistId}
                             className="artist-item"
+                            onClick={() => handleArtistClick(artist.artistId)}
                         >
-                            <div className="artist-image" onClick={() => handleArtistClick(artist.artistId)}>
+                            <div className="artist-image">
                                 {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
                                     <img src={artist.artistImageUrl} alt={artist.artistTitle} />
                                 ) : (
                                     <img src={defaultProfileImage} alt="Default profile" />
                                 )}
                             </div>
-                            <p className="artist-title" onClick={() => handleArtistClick(artist.artistId)}>
+                            <p className="artist-title">
                                 {artist.artistTitle}
                             </p>
 
-                            {/* Show close icon ONLY if this artist is currently selected */}
                             {selectedArtistId === artist.artistId && (
                                 <div className="close-icon-right">
-                                    <Icon icon="close" onClick={() => setSelectedArtistId(null)} />
+                                    <Icon
+                                        icon="close"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // ✅ Prevent click from reaching parent
+                                            setSelectedArtistId(null);
+                                        }}
+                                    />
                                 </div>
                             )}
                         </div>
                     ))
                 )}
+
 
             </div>
 
