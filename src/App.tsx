@@ -72,14 +72,13 @@ function App() {
         <div className="inner-container">
           {loading && <Loading message="Loading..." />}
           <div className="left-section">
-            <div className="column column-1">
-              {!loading && !error && (
-                // 
-                <ArtistList ArtistsData={artists} />
-              )}
-            </div>
+
+            {!loading && !error && (
+              <ArtistList ArtistsData={artists} />
+            )}
+
           </div>
-          <div className="map-section">
+          <div className="right-section">
             <div className="map-placeholder">
               <Map />
             </div>

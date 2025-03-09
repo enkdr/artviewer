@@ -7,11 +7,16 @@
     --dark-grey: #333;
 }
 
+html {
+    font-size: 15px;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Trebuchet MS', sans-serif;
+
 }
 
 ul {
