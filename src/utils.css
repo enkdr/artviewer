@@ -1,3 +1,12 @@
+:root {
+    --darkest-blue: #03123c;
+    --dark-blue: #000066;
+    --light-blue: #809fff;
+    --lightest-blue: #bfcfff;
+    --off-white: #f8f8f8;
+    --dark-grey: #333;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -32,7 +41,7 @@ ul {
 }
 
 .spinner-circle {
-    stroke: #3498db;
+    stroke: var(--light-blue);
     stroke-dasharray: 150, 200;
     stroke-dashoffset: 0;
     stroke-linecap: round;

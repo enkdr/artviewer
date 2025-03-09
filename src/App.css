@@ -5,18 +5,18 @@
   justify-content: flex-start;
   align-items: center;
   height: 100vh;
-  background-color: #00274d;
-  color: white;
+  background-color: var(--darkest-blue);
+  color: var(--off-white);
 }
 
 .inner-container {
   display: flex;
   width: calc(100% - 12.5rem);
-  background-color: white;
+  background-color: var(--off-white);
   border-radius: 0.75rem;
   padding: 1.25rem;
   margin-right: 1.25rem;
-  color: black;
+  color: var(--darkest-blue);
   height: calc(100vh - 2.5rem);
   margin-left: auto;
   box-sizing: border-box;
@@ -30,13 +30,9 @@
 
 .column {
   flex: 1;
-  background-color: #f0f0f0;
+  background-color: var(--off-white);
   padding: 1.25rem;
   border-radius: 0.5rem;
-}
-
-.column-2 {
-  display: none;
 }
 
 .map-section {
@@ -45,14 +41,14 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  background: #ddd;
+  background: var(--off-white);
   position: relative;
 }
 
 .map-placeholder {
   width: 100%;
   height: 100%;
-  background-color: #ccc;
+  background-color: var(--off-white);
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -68,6 +64,20 @@
 .sidebar {
   padding: 2rem;
   align-self: flex-start;
+
+  ul {
+    li {
+      padding: 0.5rem;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        color: var(--darkest-blue);
+        background-color: var(--off-white);
+      }
+    }
+  }
 }
 
 .search-input,
@@ -75,16 +85,46 @@
   width: 100%;
   padding: 0.625rem;
   border: none;
-  border-bottom: 0.0625rem solid #ccc;
+  border-bottom: 0.0625rem solid var(--off-white);
   outline: none;
   font-size: 1.2rem;
-  color: #333;
+  color: var(--dark-grey);
   margin-bottom: 1.25rem;
 }
 
 .map-container {
   height: 100vh;
   width: 100vw;
-  background: #ddd;
+  background: var(--off-white);
   position: relative;
+}
+
+.artist-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 18.75rem;
+  border: 1px solid var(--dark-grey);
+  padding: 1rem;
+  border-radius: 0.4rem;
+}
+
+.artist-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.artist-image {
+  width: 3.125rem;
+  height: 3.125rem;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-right: 0.625rem;
+}
+
+.artist-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
