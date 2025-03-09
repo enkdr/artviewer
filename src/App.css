@@ -290,9 +290,6 @@
     min-width: 12rem;
   }
 
-  .artist-title {
-    display: none;
-  }
 }
 
 .selected-gallery-info {
@@ -341,4 +338,45 @@
 
 .selected-gallery-info a:hover {
   color: #0056b3;
+}
+
+/* Home.css */
+
+.home-container {
+  padding: 2rem;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.home-container h1 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.home-container p {
+  color: #4a5568;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.home-container .buttons {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.home-container .buttons .get-started {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  color: var(--darkest-blue);
+}
+
+.home-container .buttons .get-started:hover {
+  cursor: pointer;
+  background-color: var(--darkest-blue);
+  color: var(--off-white);
 }

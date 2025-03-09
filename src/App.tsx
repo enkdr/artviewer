@@ -7,6 +7,7 @@ import { Loading } from './components/Loading'
 import { ArtistList } from './components/ArtistList'
 import { GalleryList } from './components/GalleryList'
 import { Icon } from './components/Icons'
+import { Home } from './components/Home'
 
 function App() {
 
@@ -58,9 +59,9 @@ function App() {
             <li onClick={() => setEntityDisplay('gallery')} className={entityDisplay === 'gallery' ? 'active' : ''}>
               <Icon icon="gallery" />
             </li>
-            <li>
+            {/* <li>
               <Icon icon="map" />
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="inner-container">
@@ -70,7 +71,7 @@ function App() {
             {!loading && !error && (
               entityDisplay === 'artist' && <ArtistList ArtistsData={artists} />
               || entityDisplay === 'gallery' && <GalleryList GalleryData={galleries} />
-
+              || entityDisplay === 'home' && <Home onClick={() => setEntityDisplay('artist')} />
             )}
           </div>
 
