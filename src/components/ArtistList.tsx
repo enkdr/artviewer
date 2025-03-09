@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Artist, Artwork, Gallery } from '../types';
+import { Artist, Artwork } from '../types';
 import { defaultProfileImage } from './Icons';
 import { getArtworksByArtist } from '../db';
 
@@ -10,12 +10,12 @@ interface ArtistListProps {
 export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const artistListRef = useRef<HTMLDivElement>(null);
-    const artworkListRef = useRef<HTMLDivElement>(null); // Ref for the artwork list
+    const artworkListRef = useRef<HTMLDivElement>(null);
     const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
     const filteredArtists = selectedArtistId
-        ? data.filter((artist) => artist.artistId === selectedArtistId) // Show only selected artist
+        ? data.filter((artist) => artist.artistId === selectedArtistId)
         : data.filter((artist) => artist.artistTitle.toLowerCase().includes(searchTerm.toLowerCase()));
     useEffect(() => {
         if (artistListRef.current) {
@@ -35,13 +35,13 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
 
     useEffect(() => {
         if (artworkListRef.current) {
-            artworkListRef.current.scrollTop = 0; // Scroll top when artworks change
+            artworkListRef.current.scrollTop = 0;
         }
-    }, [artworks]); // This effect runs whenever artworks change
+    }, [artworks]);
 
     const handleArtistClick = (artistId: string) => {
         setSelectedArtistId(artistId);
-        setSearchTerm(""); // Clear search input when an artist is selected
+        setSearchTerm("");
     };
 
     return (
@@ -54,8 +54,8 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onFocus={() => {
-                        setSelectedArtistId(null); // Reset selected artist
-                        setArtworks([]); // Clear artworks
+                        setSelectedArtistId(null);
+                        setArtworks([]);
                     }}
                 />
                 {filteredArtists.length === 0 ? (
@@ -65,7 +65,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                         <div
                             key={artist.artistId}
                             className="artist-item"
-                            onClick={() => handleArtistClick(artist.artistId)} // Add click handler
+                            onClick={() => handleArtistClick(artist.artistId)}
                         >
                             <div className="artist-image">
                                 {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
@@ -81,7 +81,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
             </div>
 
             {selectedArtistId && (
-                <div className="artwork-list" ref={artworkListRef}> {/* Added ref here */}
+                <div className="artwork-list" ref={artworkListRef}>
                     {artworks.length === 0 ? (
                         <p>No artworks found for this artist.</p>
                     ) : (
@@ -113,21 +113,6 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                     )}
                 </div>
             )}
-        </div>
-    );
-};
-
-interface GalleryListProps {
-    GalleryData: Gallery[];
-}
-
-export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data }) => {
-    return (
-        <div className="gallery-list">
-            {data.length === 0 && <p>No gallery data found.</p>}
-            {data.map((gallery) => (
-                <p key={gallery.galleryId}>{gallery.galleryTitle}</p>
-            ))}
         </div>
     );
 };

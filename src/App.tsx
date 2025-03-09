@@ -4,17 +4,22 @@ import Map from './components/Map'
 import { getAllArtists, getAllGalleries, getArtworksByArtist, fetchAndStoreEntities } from './db'
 import { Artist, Artwork, Gallery } from './types'
 import { Loading } from './components/Loading'
-import { ArtistList, GalleryList } from './components/DataLists'
+import { ArtistList } from './components/ArtistList'
+import { GalleryList } from './components/GalleryList'
 import { Icon } from './components/Icons'
 
 function App() {
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   const [artists, setArtists] = useState<Artist[]>([])
   const [galleries, setGalleries] = useState<Gallery[]>([])
+
+  const [entityDisplay, setEntityDisplay] = useState<string | null>('home')
+
+  console.log(entityDisplay)
+
 
   // initialise IndexedDB and fetch data OR pull from existing data
   useEffect(() => {
@@ -44,13 +49,13 @@ function App() {
       <div className="outer-container">
         <div className="sidebar">
           <ul>
-            <li>
+            <li onClick={() => setEntityDisplay('home')} className={entityDisplay === 'home' ? 'active' : ''}>
               <Icon icon="home" />
             </li>
-            <li>
+            <li onClick={() => setEntityDisplay('artist')} className={entityDisplay === 'artist' ? 'active' : ''}>
               <Icon icon="artist" />
             </li>
-            <li>
+            <li onClick={() => setEntityDisplay('gallery')} className={entityDisplay === 'gallery' ? 'active' : ''}>
               <Icon icon="gallery" />
             </li>
             <li>
@@ -60,20 +65,22 @@ function App() {
         </div>
         <div className="inner-container">
           {loading && <Loading message="Loading..." />}
+
           <div className="left-section">
-
             {!loading && !error && (
-              <ArtistList ArtistsData={artists} />
-            )}
+              entityDisplay === 'artist' && <ArtistList ArtistsData={artists} />
+              || entityDisplay === 'gallery' && <GalleryList GalleryData={galleries} />
 
+            )}
           </div>
+
           <div className="right-section">
             <div className="map-placeholder">
               <Map />
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }

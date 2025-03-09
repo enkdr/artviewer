@@ -57,12 +57,14 @@
 
   ul {
     li {
+      margin-bottom: .4rem;
       padding: 0.5rem;
       cursor: pointer;
       border-radius: 0.5rem;
       transition: background-color 0.2s ease-in-out;
 
-      &:hover {
+      &:hover,
+      &.active {
         color: var(--darkest-blue);
         background-color: var(--off-white);
       }
