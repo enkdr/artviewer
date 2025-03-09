@@ -1,11 +1,12 @@
 // TODO sync/update
 import { openDB, IDBPDatabase } from 'idb';
-import { Artist, Artwork, EntityMeta, Gallery } from './types';
+import { Artist, Artwork, Country, EntityMeta, Gallery } from './types';
 
 const DB_NAME = 'ArtviewerDB';
 const DB_VERSION = 1;
 
-const fetchEntityData: EntityMeta<Artist | Artwork | Gallery>[] = [
+// this is setting up and requesting data from the API for IndexedDB
+const fetchEntityData: EntityMeta<Artist | Artwork | Gallery | Country>[] = [
     {
         key: 'artists',
         keyPath: 'artistId',
@@ -23,6 +24,12 @@ const fetchEntityData: EntityMeta<Artist | Artwork | Gallery>[] = [
         keyPath: 'galleryId',
         url: 'https://artsearcher.app/api/galleries',
         transform: (data) => Object.values(data as Record<string, Gallery>),
+    },
+    {
+        key: 'countries',
+        keyPath: 'countryId',
+        url: 'https://artsearcher.app/api/countries',
+        transform: (data) => Object.values(data as Record<string, Country>),
     },
 ];
 
@@ -78,10 +85,10 @@ export async function fetchAndStoreData<T>(
 
 
 export function fetchAndStoreEntities(): Promise<void[]> {
-    return Promise.all(fetchEntityData.map(config => fetchAndStoreData<Artist | Artwork | Gallery>(config.key, config.url, config.transform)));
+    return Promise.all(fetchEntityData.map(config => fetchAndStoreData<Artist | Artwork | Gallery | Country>(config.key, config.url, config.transform)));
 }
 
-// these are kind of custom calls from the UI
+// these are fired from App.tsx and pull data from IndexedDB
 
 export async function getAllArtists(): Promise<Artist[]> {
     const db = await initDB();

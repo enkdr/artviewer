@@ -1,4 +1,4 @@
-type EntityType = 'artists' | 'artworks' | 'galleries';
+type EntityType = 'artists' | 'artworks' | 'galleries' | 'countries';
 
 // keyPath is the key used to store the data in IndexedDB
 export interface EntityMeta<T> {
@@ -47,4 +47,9 @@ export interface Gallery {
     galleryLink: string;
     galleryLat: string;
     galleryLon: string;
+}
+
+export interface Country {
+    countryId: string;
+    countryTitle: string;
 }

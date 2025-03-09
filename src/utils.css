@@ -5,6 +5,10 @@
     font-family: 'Trebuchet MS', sans-serif;
 }
 
+ul {
+    list-style: none;
+}
+
 .loading-message {
     font-size: 1rem;
     color: #333;
