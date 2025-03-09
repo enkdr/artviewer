@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Artwork, Gallery } from '../types';
-import { defaultProfileImage } from './Icons';
+import { defaultProfileImage, Icon } from './Icons';
 import { getArtworksByGallery } from '../db';
 
 interface GalleryListProps {
@@ -49,44 +49,47 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data }) =
 
     return (
         <div>
-            <div className={`gallery-list ${selectedGalleryId ? "" : "full-height"}`} ref={galleryListRef}>
-                <input
-                    type="text"
-                    placeholder="Search galleries"
-                    className="search-input"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onFocus={() => {
-                        setSelectedGalleryId(null);
-                        setArtworks([]);
-                    }}
-                />
-                {filteredGalleries.length === 0 ? (
-                    <p>No gallery data found.</p>
-                ) : (
-                    filteredGalleries.map((gallery) => (
-                        <div
-                            key={gallery.galleryId}
-                            className="gallery-item"
-                            onClick={() => handleGalleryClick(gallery.galleryId)}
-                        >
-                            <p className="gallery-title">{gallery.galleryTitle}</p>
-                        </div>
-                    ))
-                )}
-            </div>
 
+            {selectedGalleryId && selectedGallery ? (
+                <div className="selected-gallery-info">
+                    <Icon icon="home" onClick={() => setSelectedGalleryId(null)} />
+                    <h4><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
+                    <p>{selectedGallery.galleryAddress}</p>
+                    <p>{selectedGallery.countryTitle}</p>
+                </div>
+            ) : (
+
+                <div className={`gallery-list ${selectedGalleryId ? "" : "full-height"}`} ref={galleryListRef}>
+                    <input
+                        type="text"
+                        placeholder="Search galleries"
+                        className="search-input"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onFocus={() => {
+                            setSelectedGalleryId(null);
+                            setArtworks([]);
+                        }}
+                    />
+                    {filteredGalleries.length === 0 ? (
+                        <p>No gallery data found.</p>
+                    ) : (
+                        filteredGalleries.map((gallery) => (
+                            <div
+                                key={gallery.galleryId}
+                                className="gallery-item"
+                                onClick={() => handleGalleryClick(gallery.galleryId)}
+                            >
+                                <p className="gallery-title">{gallery.galleryTitle}</p>
+                            </div>
+                        ))
+                    )}
+                </div>
+            )}
 
 
             {selectedGalleryId && (
                 <div className="artwork-list" ref={artworkListRef}>
-                    {selectedGalleryId && selectedGallery && (
-                        <div className="selected-gallery-info">
-                            <h4><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
-                            <p>{selectedGallery.galleryAddress}</p>
-                            <p>{selectedGallery.countryTitle}</p>
-                        </div>
-                    )}
                     {artworks.length === 0 ? (
                         <p>No artworks found for this gallery.</p>
                     ) : (
