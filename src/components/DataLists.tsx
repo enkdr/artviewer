@@ -14,10 +14,9 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
     const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
-    const filteredArtists = data.filter((artist) => {
-        return artist.artistTitle.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-
+    const filteredArtists = selectedArtistId
+        ? data.filter((artist) => artist.artistId === selectedArtistId) // Show only selected artist
+        : data.filter((artist) => artist.artistTitle.toLowerCase().includes(searchTerm.toLowerCase()));
     useEffect(() => {
         if (artistListRef.current) {
             artistListRef.current.scrollTop = 0;
@@ -42,17 +41,22 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
 
     const handleArtistClick = (artistId: string) => {
         setSelectedArtistId(artistId);
+        setSearchTerm(""); // Clear search input when an artist is selected
     };
 
     return (
         <div>
-            <div className="artist-list" ref={artistListRef}>
+            <div className={`artist-list ${selectedArtistId ? "collapsed" : "full-height"}`} ref={artistListRef}>
                 <input
                     type="text"
                     placeholder="Search artists"
                     className="search-input"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onFocus={() => {
+                        setSelectedArtistId(null); // Reset selected artist
+                        setArtworks([]); // Clear artworks
+                    }}
                 />
                 {filteredArtists.length === 0 ? (
                     <p>No artist data found.</p>
