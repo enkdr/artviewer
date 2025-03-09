@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Artwork, Gallery } from '../types';
-import { defaultProfileImage, Icon } from './Icons';
 import { getArtworksByGallery } from '../db';
+import { Icon } from './Icons';
 
 interface GalleryListProps {
     GalleryData: Gallery[];
@@ -97,7 +97,7 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data }) =
                             <div key={artwork.artworkId} className="artwork-card">
                                 <div className="artwork-image-container">
                                     <img
-                                        src={artwork.imageUrl || defaultProfileImage}
+                                        src={artwork.imageUrl}
                                         alt={artwork.artworkTitle}
                                         className="artwork-image"
                                     />

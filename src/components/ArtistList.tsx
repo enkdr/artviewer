@@ -71,7 +71,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                                 {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
                                     <img src={artist.artistImageUrl} alt={artist.artistTitle} />
                                 ) : (
-                                    <img src={defaultProfileImage} alt="Default profile" />
+                                    defaultProfileImage
                                 )}
                             </div>
                             <p className="artist-title">
@@ -83,7 +83,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                                     <Icon
                                         icon="close"
                                         onClick={(e) => {
-                                            e.stopPropagation(); // ✅ Prevent click from reaching parent
+                                            e.stopPropagation();
                                             setSelectedArtistId(null);
                                         }}
                                     />
@@ -104,11 +104,17 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
                         artworks.map((artwork) => (
                             <div key={artwork.artworkId} className="artwork-card">
                                 <div className="artwork-image-container">
-                                    <img
-                                        src={artwork.imageUrl || defaultProfileImage}
-                                        alt={artwork.artworkTitle}
-                                        className="artwork-image"
-                                    />
+
+                                    {artwork.imageUrl ? (
+                                        <img
+                                            src={artwork.imageUrl}
+                                            alt={artwork.artworkTitle}
+                                            className="artwork-image"
+                                        />
+                                    ) : (
+                                        defaultProfileImage
+                                    )}
+
                                 </div>
                                 <div className="artwork-info">
                                     <h3 className="artwork-title">{artwork.artworkTitle}</h3>
