@@ -3,6 +3,7 @@ import { Artwork, Gallery } from '../types';
 import { getArtworksByGallery } from '../db';
 import { Icon } from './Icons';
 import { ArtworkList } from './ArtworkList';
+import { useMap } from '../context/MapContext';
 
 interface GalleryListProps {
     GalleryData: Gallery[];
@@ -10,6 +11,9 @@ interface GalleryListProps {
 }
 
 export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId }) => {
+
+    const { showGalleryOnMap } = useMap()
+
     const [searchTerm, setSearchTerm] = useState<string>("");
     const galleryListRef = useRef<HTMLDivElement>(null);
     const artworkListRef = useRef<HTMLDivElement>(null);
@@ -76,11 +80,14 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                     {filteredGalleries.length === 0 ? (
                         <p>No gallery data found.</p>
                     ) : (
-                        filteredGalleries.map((gallery) => (
+                        filteredGalleries.map((gallery: Gallery) => (
                             <div
                                 key={gallery.galleryId}
                                 className="gallery-item"
-                                onClick={() => handleGalleryClick(gallery.galleryId)}
+                                onClick={() => {
+                                    handleGalleryClick(gallery.galleryId);
+                                    showGalleryOnMap(gallery.galleryLat, gallery.galleryLon);
+                                }}
                             >
                                 <p className="gallery-title">{gallery.galleryTitle}</p>
                             </div>
