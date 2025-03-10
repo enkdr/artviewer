@@ -4,7 +4,7 @@ import { iconPaths } from '../types'
 
 interface IconProps {
     icon: keyof typeof iconPaths;
-    onClick?: () => void;
+    onClick?: (e: any) => void;
     size?: number;
     className?: string;
 }

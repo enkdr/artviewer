@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Artwork, Gallery } from '../types';
 import { getArtworksByGallery } from '../db';
 import { Icon } from './Icons';
+import { ArtworkList } from './ArtworkList';
 
 interface GalleryListProps {
     GalleryData: Gallery[];
@@ -86,41 +87,8 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data }) =
                     )}
                 </div>
             )}
-
-
             {selectedGalleryId && (
-                <div className="artwork-list" ref={artworkListRef}>
-                    {artworks.length === 0 ? (
-                        <p>No artworks found for this gallery.</p>
-                    ) : (
-                        artworks.map((artwork) => (
-                            <div key={artwork.artworkId} className="artwork-card">
-                                <div className="artwork-image-container">
-                                    <img
-                                        src={artwork.imageUrl}
-                                        alt={artwork.artworkTitle}
-                                        className="artwork-image"
-                                    />
-                                </div>
-                                <div className="artwork-info">
-                                    <h3 className="artwork-title">{artwork.artworkTitle}</h3>
-                                    <h4>{artwork.artistFirstname} {artwork.artistLastname}</h4>
-                                    <p className="artwork-year">{artwork.artworkYear}</p>
-                                    <p className="artwork-medium">{artwork.artworkMedium}</p>
-                                    <p className="artwork-style">{artwork.artworkStyle}</p>
-                                    <p className="artwork-dimensions">{artwork.artworkDimensions}</p>
-                                    <a
-                                        href={artwork.artworkGalleryLink || artwork.galleryLink}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {artwork.galleryTitle}
-                                    </a>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
+                <ArtworkList artworks={artworks} ref={artworkListRef} />
             )}
         </div>
     );
