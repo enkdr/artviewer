@@ -11,18 +11,6 @@ import { Home } from './components/Home'
 
 function App() {
 
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const [artists, setArtists] = useState<Artist[]>([])
-  const [galleries, setGalleries] = useState<Gallery[]>([])
-
-  const [entityDisplay, setEntityDisplay] = useState<string | null>('home')
-
-  console.log(entityDisplay)
-
-  const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(null);
-
   // initialise IndexedDB and fetch data OR pull from existing data
   useEffect(() => {
     const init = async () => {
@@ -45,6 +33,17 @@ function App() {
     };
     init();
   }, []);
+
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const [artists, setArtists] = useState<Artist[]>([])
+  const [galleries, setGalleries] = useState<Gallery[]>([])
+
+  const [entityDisplay, setEntityDisplay] = useState<string | null>('home')
+
+  // from ArtistsList -> ArtworkList -> 'more from gallery' link 
+  const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(null);
 
   const onGallerySelect = (galleryId: string) => {
     setSelectedGalleryId(galleryId);
@@ -77,9 +76,11 @@ function App() {
             {!loading && !error && (
               <>
                 {entityDisplay === 'artist' && (
+                  // pass in onGallerySelect for 'more from gallery' link
                   <ArtistList ArtistsData={artists} onGallerySelect={onGallerySelect} />
                 )}
                 {entityDisplay === 'gallery' && (
+                  // pass in galleryId for 'more from gallery' link 
                   <GalleryList GalleryData={galleries} initialGalleryId={selectedGalleryId} />
                 )}
                 {entityDisplay === 'home' && <Home onClick={() => setEntityDisplay('artist')} />}
