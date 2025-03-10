@@ -38,7 +38,10 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
                             {onGallerySelect && (
                                 <p
                                     className='more-from-gallery link'
-                                    onClick={() => onGallerySelect(artwork.galleryId)}
+                                    onClick={() => {
+                                        onGallerySelect(artwork.galleryId);
+                                        showGalleryOnMap(artwork.galleryLat, artwork.galleryLon);
+                                    }}
                                 >
                                     More from this gallery
                                 </p>
