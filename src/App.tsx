@@ -8,6 +8,8 @@ import { ArtistList } from './components/ArtistList'
 import { GalleryList } from './components/GalleryList'
 import { Icon } from './components/Icons'
 import { Home } from './components/Home'
+import { MapProvider } from './context/MapContext'
+
 
 function App() {
 
@@ -51,7 +53,7 @@ function App() {
   };
 
   return (
-    <>
+    <MapProvider>
       <div className="outer-container">
         <div className="sidebar">
           <ul>
@@ -95,7 +97,7 @@ function App() {
           </div>
         </div>
       </div >
-    </>
+    </MapProvider>
   )
 }
 

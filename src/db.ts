@@ -17,13 +17,22 @@ const fetchEntityData: EntityMeta<Artist | Artwork | Gallery | Country>[] = [
         key: 'artworks',
         keyPath: 'artworkId',
         url: 'https://artsearcher.app/api/artworks_all',
-        transform: (data) => Object.values(data as Record<string, Artwork>),
+        transform: (data) => Object.values(data as Record<string, Artwork>).map((artwork) => ({
+            ...artwork,
+            artworkYear: parseInt(artwork.artworkYear),
+            galleryLat: parseFloat(artwork.galleryLat),
+            galleryLon: parseFloat(artwork.galleryLon),
+        })),
     },
     {
         key: 'galleries',
         keyPath: 'galleryId',
         url: 'https://artsearcher.app/api/galleries',
-        transform: (data) => Object.values(data as Record<string, Gallery>),
+        transform: (data) => Object.values(data as Record<string, Gallery>).map((gallery) => ({
+            ...gallery,
+            galleryLat: parseFloat(gallery.galleryLat),
+            galleryLon: parseFloat(gallery.galleryLon),
+        })),
     },
     {
         key: 'countries',

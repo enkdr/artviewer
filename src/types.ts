@@ -38,8 +38,8 @@ export interface Artwork {
     galleryTitle: string;
     galleryAddress: string;
     galleryLink: string;
-    galleryLat: number;
-    galleryLon: number;
+    galleryLat: string;
+    galleryLon: string;
     countryId: string;
     countryTitle: string;
 }
@@ -49,8 +49,8 @@ export interface Gallery {
     galleryTitle: string;
     galleryAddress: string;
     galleryLink: string;
-    galleryLat: number;
-    galleryLon: number;
+    galleryLat: string;
+    galleryLon: string;
     countryId: string;
     countryTitle: string;
 }

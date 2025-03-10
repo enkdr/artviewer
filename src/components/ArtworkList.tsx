@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import { Artwork } from "../types";
+import { useMap } from '../context/MapContext';
 
 interface ArtworkListProps {
     artworks: Artwork[];
@@ -7,6 +8,9 @@ interface ArtworkListProps {
 }
 
 export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artworks, onGallerySelect }, ref) => {
+
+    const { showGalleryOnMap } = useMap()
+
     return (
         <div className="artwork-list" ref={ref}>
             {artworks.length === 0 ? (
@@ -28,14 +32,8 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
                             <p className="artwork-medium">{artwork.artworkMedium}</p>
                             <p className="artwork-style">{artwork.artworkStyle}</p>
                             <p className="artwork-dimensions">{artwork.artworkDimensions}</p>
-                            <p>
-                                <a className='link'
-                                    href={artwork.artworkGalleryLink || artwork.galleryLink}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    {artwork.galleryTitle}
-                                </a>
+                            <p className='link' onClick={() => showGalleryOnMap(artwork.galleryLat, artwork.galleryLon)}>
+                                {artwork.galleryTitle}
                             </p>
                             {onGallerySelect && (
                                 <p
