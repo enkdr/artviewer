@@ -3,9 +3,10 @@ import { Artwork } from "../types";
 
 interface ArtworkListProps {
     artworks: Artwork[];
+    onGallerySelect?: (galleryId: string) => void;
 }
 
-export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artworks }, ref) => {
+export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artworks, onGallerySelect }, ref) => {
     return (
         <div className="artwork-list" ref={ref}>
             {artworks.length === 0 ? (
@@ -27,13 +28,23 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
                             <p className="artwork-medium">{artwork.artworkMedium}</p>
                             <p className="artwork-style">{artwork.artworkStyle}</p>
                             <p className="artwork-dimensions">{artwork.artworkDimensions}</p>
-                            <a
-                                href={artwork.artworkGalleryLink || artwork.galleryLink}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                {artwork.galleryTitle}
-                            </a>
+                            <p>
+                                <a className='link'
+                                    href={artwork.artworkGalleryLink || artwork.galleryLink}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {artwork.galleryTitle}
+                                </a>
+                            </p>
+                            {onGallerySelect && (
+                                <p
+                                    className='more-from-gallery link'
+                                    onClick={() => onGallerySelect(artwork.galleryId)}
+                                >
+                                    More from this gallery
+                                </p>
+                            )}
                         </div>
                     </div>
                 ))

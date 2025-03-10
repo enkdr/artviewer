@@ -21,6 +21,7 @@ function App() {
 
   console.log(entityDisplay)
 
+  const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(null);
 
   // initialise IndexedDB and fetch data OR pull from existing data
   useEffect(() => {
@@ -44,6 +45,11 @@ function App() {
     };
     init();
   }, []);
+
+  const onGallerySelect = (galleryId: string) => {
+    setSelectedGalleryId(galleryId);
+    setEntityDisplay('gallery');
+  };
 
   return (
     <>
@@ -69,9 +75,15 @@ function App() {
 
           <div className="left-section">
             {!loading && !error && (
-              entityDisplay === 'artist' && <ArtistList ArtistsData={artists} />
-              || entityDisplay === 'gallery' && <GalleryList GalleryData={galleries} />
-              || entityDisplay === 'home' && <Home onClick={() => setEntityDisplay('artist')} />
+              <>
+                {entityDisplay === 'artist' && (
+                  <ArtistList ArtistsData={artists} onGallerySelect={onGallerySelect} />
+                )}
+                {entityDisplay === 'gallery' && (
+                  <GalleryList GalleryData={galleries} initialGalleryId={selectedGalleryId} />
+                )}
+                {entityDisplay === 'home' && <Home onClick={() => setEntityDisplay('artist')} />}
+              </>
             )}
           </div>
 

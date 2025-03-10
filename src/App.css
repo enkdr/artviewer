@@ -128,18 +128,18 @@
   border-radius: 0.4rem;
   scrollbar-width: none;
   position: relative;
-
+  line-height: 1.4rem;
+  gap: 1.4rem;
 }
 
-.artwork-list {
-  display: flex;
+/* take out eventually */
+/* .artwork-list {
   flex-wrap: nowrap;
   gap: 1.4rem;
   justify-content: flex-start;
   overflow-x: auto;
-  overflow-y: auto;
   width: 100%;
-}
+} */
 
 .artist-list::-webkit-scrollbar,
 .artist-list::-webkit-scrollbar {

@@ -6,13 +6,14 @@ import { ArtworkList } from './ArtworkList';
 
 interface GalleryListProps {
     GalleryData: Gallery[];
+    initialGalleryId: string | null;
 }
 
-export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data }) => {
+export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const galleryListRef = useRef<HTMLDivElement>(null);
     const artworkListRef = useRef<HTMLDivElement>(null);
-    const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(null);
+    const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(initialGalleryId);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
     const filteredGalleries = selectedGalleryId

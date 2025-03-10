@@ -6,9 +6,10 @@ import { ArtworkList } from './ArtworkList';
 
 interface ArtistListProps {
     ArtistsData: Artist[];
+    onGallerySelect: (galleryId: string) => void;
 }
 
-export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => {
+export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGallerySelect }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const artistListRef = useRef<HTMLDivElement>(null);
     const artworkListRef = useRef<HTMLDivElement>(null);
@@ -96,7 +97,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data }) => 
             </div>
 
             {selectedArtistId && (
-                <ArtworkList artworks={artworks} ref={artworkListRef} />
+                <ArtworkList artworks={artworks} ref={artworkListRef} onGallerySelect={onGallerySelect} />
             )}
         </div>
     );
