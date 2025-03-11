@@ -13,7 +13,7 @@ const fetchEntityData: EntityMeta<Artist | Artwork | Gallery | Country>[] = [
         url: 'https://artsearcher.app/api/artists',
         transform: (data) => Object.values(data as Record<string, Artist>).map((artist) => ({
             ...artist,
-            artistImageUrl: `https://artsearcher.app${artist.artistImageUrl}`,
+            artistImageUrl: artist.artistImageUrl ? `https://artsearcher.app${artist.artistImageUrl}` : "",
         })),
     },
     {
@@ -22,7 +22,7 @@ const fetchEntityData: EntityMeta<Artist | Artwork | Gallery | Country>[] = [
         url: 'https://artsearcher.app/api/artworks_all',
         transform: (data) => Object.values(data as Record<string, Artwork>).map((artwork) => ({
             ...artwork,
-            imageUrl: `https://artsearcher.app${artwork.imageUrl}`,
+            imageUrl: artwork.imageUrl ? `https://artsearcher.app${artwork.imageUrl}` : "",
             artworkYear: parseInt(artwork.artworkYear),
         })),
     },

@@ -275,6 +275,9 @@
   color: var(--darkest-blue);
 }
 
+.more-from-gallery {
+  margin-top: .8rem;
+}
 
 @media (max-width: 960px) {
   .left-section {
