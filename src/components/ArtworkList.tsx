@@ -14,7 +14,7 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
     return (
         <div className="artwork-list" ref={ref}>
             {artworks.length === 0 ? (
-                <p>No artworks found for this artist.</p>
+                <p>No {onGallerySelect ? 'artworks' : 'gallery artworks'} found</p>
             ) : (
                 artworks.map((artwork) => (
                     <div key={artwork.artworkId} className="artwork-card">
