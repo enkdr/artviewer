@@ -71,7 +71,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
                         >
                             <div className="artist-image">
                                 {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
-                                    <img src={artist.artistImageUrl} alt={artist.artistTitle} />
+                                    <img loading="lazy" src={artist.artistImageUrl} alt={artist.artistTitle} />
                                 ) : (
                                     defaultProfileImage
                                 )}

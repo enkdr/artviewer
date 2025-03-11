@@ -19,7 +19,7 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
                 artworks.map((artwork) => (
                     <div key={artwork.artworkId} className="artwork-card">
                         <div className="artwork-image-container">
-                            <img
+                            <img loading="lazy"
                                 src={artwork.imageUrl}
                                 alt={artwork.artworkTitle}
                                 className="artwork-image"
