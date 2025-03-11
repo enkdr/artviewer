@@ -24,8 +24,6 @@ const fetchEntityData: EntityMeta<Artist | Artwork | Gallery | Country>[] = [
             ...artwork,
             imageUrl: `https://artsearcher.app${artwork.imageUrl}`,
             artworkYear: parseInt(artwork.artworkYear),
-            galleryLat: parseFloat(artwork.galleryLat),
-            galleryLon: parseFloat(artwork.galleryLon),
         })),
     },
     {
@@ -34,8 +32,6 @@ const fetchEntityData: EntityMeta<Artist | Artwork | Gallery | Country>[] = [
         url: 'https://artsearcher.app/api/galleries',
         transform: (data) => Object.values(data as Record<string, Gallery>).map((gallery) => ({
             ...gallery,
-            galleryLat: parseFloat(gallery.galleryLat),
-            galleryLon: parseFloat(gallery.galleryLon),
         })),
     },
     {
