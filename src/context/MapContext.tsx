@@ -1,27 +1,37 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Location } from "../types";
+import { Location, Gallery } from "../types";
+import { getGalleryByGalleryId } from '../db';
 
 type MapContextType = {
     locations: Location[] | null;
+    gallery: Gallery | null;
     updateLocations: (loc: Location[] | Location) => void;
-    showGalleryOnMap: (lat: number, lon: number) => void;
+    showGalleryOnMapById: (id: string) => void;
 }
 
 const MapContext = createContext<MapContextType | null>(null);
 
 export const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+
+    const showGalleryOnMapById = async (id: string) => {
+        const gallery = await getGalleryByGalleryId(id);
+        if (gallery) {
+            setGallery(gallery);
+        } else {
+            console.warn("Gallery not found");
+        }
+    };
+
     const [locations, setLocations] = useState<Location[] | null>(null);
+    const [gallery, setGallery] = useState<Gallery | null>(null);
 
     const updateLocations = (loc: Location[] | Location) => {
         setLocations(Array.isArray(loc) ? loc : [loc]);
     }
 
-    const showGalleryOnMap = (lat: number, lon: number) => {
-        setLocations([{ lat, lon }]); // Update the map location with the selected gallery's lat/lon
-    };
 
     return (
-        <MapContext.Provider value={{ locations, updateLocations, showGalleryOnMap }}>
+        <MapContext.Provider value={{ locations, gallery, updateLocations, showGalleryOnMapById }}>
             {children}
         </MapContext.Provider>
     );

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Artist, Artwork } from '../types';
 import { defaultProfileImage, Icon } from './Icons';
-import { getArtworksByArtist } from '../db';
+import { getArtworksByArtistId } from '../db';
 import { ArtworkList } from './ArtworkList';
 
 interface ArtistListProps {
@@ -33,7 +33,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
     useEffect(() => {
         if (selectedArtistId) {
             const fetchArtworks = async () => {
-                const data = await getArtworksByArtist(selectedArtistId);
+                const data = await getArtworksByArtistId(selectedArtistId);
                 setArtworks(data);
             };
             fetchArtworks();

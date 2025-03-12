@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Artwork, Gallery } from '../types';
-import { getArtworksByGallery } from '../db';
+import { getArtworksByGalleryId } from '../db';
 import { Icon } from './Icons';
 import { ArtworkList } from './ArtworkList';
 import { useMap } from '../context/MapContext';
@@ -13,7 +13,7 @@ interface GalleryListProps {
 
 export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId, onArtistSelect }) => {
 
-    const { showGalleryOnMap } = useMap()
+    const { showGalleryOnMapById } = useMap()
 
     const [searchTerm, setSearchTerm] = useState<string>("");
     const galleryListRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
     useEffect(() => {
         if (selectedGalleryId) {
             const fetchArtworks = async () => {
-                const data = await getArtworksByGallery(selectedGalleryId);
+                const data = await getArtworksByGalleryId(selectedGalleryId);
                 setArtworks(data);
             };
             fetchArtworks();
@@ -89,7 +89,7 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                                     className="list-item"
                                     onClick={() => {
                                         handleGalleryClick(gallery.galleryId);
-                                        showGalleryOnMap(gallery.galleryLat, gallery.galleryLon);
+                                        showGalleryOnMapById(gallery.galleryId);
                                     }}
                                 >
                                     <div className="list-image">

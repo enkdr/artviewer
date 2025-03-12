@@ -47,12 +47,24 @@ export async function initDB(): Promise<IDBPDatabase> {
     return openDB(DB_NAME, DB_VERSION, {
         upgrade(db) {
             fetchEntityData.map((config) => {
+                let store;
+
                 if (!db.objectStoreNames.contains(config.key)) {
-                    db.createObjectStore(config.key, { keyPath: config.keyPath });
+                    store = db.createObjectStore(config.key, { keyPath: config.keyPath });
+
+                    // Add index based on keyPath (e.g., 'artistId', 'artworkId', 'galleryId')
+                    store.createIndex(config.keyPath, config.keyPath, { unique: true });
+                } else {
+                    // Optional: open existing store to add index if not present (during upgrades)
+                    store = db.transaction(config.key, 'versionchange').objectStore(config.key);
+
+                    if (!Array.from(store.indexNames).includes(config.keyPath)) {
+                        store.createIndex(config.keyPath, config.keyPath, { unique: true });
+                    }
                 }
             });
         }
-    })
+    });
 }
 
 
@@ -110,14 +122,24 @@ export async function getAllGalleries(): Promise<Gallery[]> {
     return db.getAll('galleries');
 }
 
-export async function getArtworksByArtist(artistId: string): Promise<Artwork[]> {
+export async function getArtworksByArtistId(artistId: string): Promise<Artwork[]> {
     const db = await initDB();
     const allArtworks = await db.getAll('artworks');
     return allArtworks.filter(artwork => artwork.artistId === artistId);
 }
 
-export async function getArtworksByGallery(galleryId: string): Promise<Artwork[]> {
+export async function getArtworksByGalleryId(galleryId: string): Promise<Artwork[]> {
     const db = await initDB();
     const allArtworks = await db.getAll('artworks');
     return allArtworks.filter(artwork => artwork.galleryId === galleryId);
+}
+
+export async function getGalleryByGalleryId(galleryId: string): Promise<Gallery | undefined> {
+    const db = await initDB();
+    const tx = db.transaction('galleries', 'readonly');
+    const store = tx.objectStore('galleries');
+    const index = store.index('galleryId'); // index
+    const gallery = await index.get(galleryId);
+    await tx.done;
+    return gallery;
 }

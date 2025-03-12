@@ -9,9 +9,10 @@ import { useMap } from '../context/MapContext';
 import { fromLonLat } from 'ol/proj';
 
 const Map: React.FC = () => {
+
     const mapRef = useRef<HTMLDivElement | null>(null);
     const mapInstance = useRef<OLMap | null>(null); // Use a ref to store the OLMap instance
-    const { locations } = useMap();
+    const { locations, gallery } = useMap();
 
     // Initialize map only once
     useEffect(() => {
@@ -29,7 +30,7 @@ const Map: React.FC = () => {
                 }),
             });
         }
-    }, []); // Empty array so it only runs once on mount
+    }, []);
 
     // Update the map center and zoom when locations change
     useEffect(() => {
@@ -42,6 +43,16 @@ const Map: React.FC = () => {
             });
         }
     }, [locations]);
+
+    useEffect(() => {
+        if (gallery && mapInstance.current) {
+            const view = mapInstance.current.getView();
+            view.animate({
+                center: fromLonLat([gallery.galleryLon, gallery.galleryLat]),
+                zoom: 6,
+            });
+        }
+    }, [gallery]);
 
     return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
 };

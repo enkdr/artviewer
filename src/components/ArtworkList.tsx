@@ -10,7 +10,7 @@ interface ArtworkListProps {
 
 export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artworks, onGallerySelect, onArtistSelect }, ref) => {
 
-    const { showGalleryOnMap } = useMap()
+    const { showGalleryOnMapById } = useMap()
 
     return (
         <div className="artwork-list" ref={ref}>
@@ -33,7 +33,7 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
                             <p className="artwork-medium">{artwork.artworkMedium}</p>
                             <p className="artwork-style">{artwork.artworkStyle}</p>
                             <p className="artwork-dimensions">{artwork.artworkDimensions}</p>
-                            <p className='link' onClick={() => showGalleryOnMap(artwork.galleryLat, artwork.galleryLon)}>
+                            <p className='link' onClick={() => showGalleryOnMapById(artwork.galleryId)}>
                                 {artwork.galleryTitle}
                             </p>
                             {onGallerySelect && (
@@ -41,7 +41,7 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
                                     className='more-from-gallery link'
                                     onClick={() => {
                                         onGallerySelect(artwork.galleryId);
-                                        showGalleryOnMap(artwork.galleryLat, artwork.galleryLon);
+                                        showGalleryOnMapById(artwork.galleryId);
                                     }}
                                 >
                                     More from this gallery
