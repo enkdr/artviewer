@@ -31,6 +31,7 @@ export interface Artwork {
     artworkDimensions: string;
     artworkGalleryLink: string;
     imageUrl: string;
+    artistImageUrl: string;
     artistId: string; // This links to an artist
     artistTitle: string;
     artistFirstname: string;

@@ -5,9 +5,10 @@ import { useMap } from '../context/MapContext';
 interface ArtworkListProps {
     artworks: Artwork[];
     onGallerySelect?: (galleryId: string) => void;
+    onArtistSelect?: (artistId: string) => void;
 }
 
-export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artworks, onGallerySelect }, ref) => {
+export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artworks, onGallerySelect, onArtistSelect }, ref) => {
 
     const { showGalleryOnMap } = useMap()
 
@@ -44,6 +45,16 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artwo
                                     }}
                                 >
                                     More from this gallery
+                                </p>
+                            )}
+                            {onArtistSelect && (
+                                <p
+                                    className='more-from-gallery link'
+                                    onClick={() => {
+                                        onArtistSelect(artwork.artistId);
+                                    }}
+                                >
+                                    More from this Artist
                                 </p>
                             )}
                         </div>

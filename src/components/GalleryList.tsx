@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Artwork, Gallery } from '../types';
-import { getArtworksByGallery } from '../db';
+import { getArtworksByGallery, getArtworksByArtist } from '../db';
 import { Icon } from './Icons';
 import { ArtworkList } from './ArtworkList';
 import { useMap } from '../context/MapContext';
@@ -8,9 +8,10 @@ import { useMap } from '../context/MapContext';
 interface GalleryListProps {
     GalleryData: Gallery[];
     initialGalleryId: string | null;
+    onArtistSelect: (artistId: string) => void;
 }
 
-export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId }) => {
+export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId, onArtistSelect }) => {
 
     const { showGalleryOnMap } = useMap()
 
@@ -18,7 +19,10 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
     const galleryListRef = useRef<HTMLDivElement>(null);
     const artworkListRef = useRef<HTMLDivElement>(null);
     const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(initialGalleryId);
+
     const [artworks, setArtworks] = useState<Artwork[]>([]);
+
+    // console.log(" :: selectedArtistId :: ", selectedArtistId)
 
     const filteredGalleries = selectedGalleryId
         ? data.filter((gallery) => gallery.galleryId === selectedGalleryId)
@@ -96,7 +100,7 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                 </div>
             )}
             {selectedGalleryId && (
-                <ArtworkList artworks={artworks} ref={artworkListRef} />
+                <ArtworkList artworks={artworks} ref={artworkListRef} onArtistSelect={onArtistSelect} />
             )}
         </div>
     );

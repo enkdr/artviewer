@@ -23,6 +23,7 @@ const fetchEntityData: EntityMeta<Artist | Artwork | Gallery | Country>[] = [
         transform: (data) => Object.values(data as Record<string, Artwork>).map((artwork) => ({
             ...artwork,
             imageUrl: artwork.imageUrl ? `https://artsearcher.app${artwork.imageUrl}` : "",
+            artistImageUrl: artwork.artistImageUrl ? `https://artsearcher.app${artwork.artistImageUrl}` : "",
             artworkYear: parseInt(artwork.artworkYear),
         })),
     },

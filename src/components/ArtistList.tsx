@@ -7,13 +7,15 @@ import { ArtworkList } from './ArtworkList';
 interface ArtistListProps {
     ArtistsData: Artist[];
     onGallerySelect: (galleryId: string) => void;
+    initialArtistId: string | null;
 }
 
-export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGallerySelect }) => {
+export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGallerySelect, initialArtistId }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const artistListRef = useRef<HTMLDivElement>(null);
     const artworkListRef = useRef<HTMLDivElement>(null);
-    const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
+    // const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
+    const [selectedArtistId, setSelectedArtistId] = useState<string | null>(initialArtistId);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
     const filteredArtists = selectedArtistId

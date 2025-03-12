@@ -47,9 +47,16 @@ function App() {
   // from ArtistsList -> ArtworkList -> 'more from gallery' link 
   const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(null);
 
+  const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
+
   const onGallerySelect = (galleryId: string) => {
     setSelectedGalleryId(galleryId);
     setEntityDisplay('gallery');
+  };
+
+  const onArtistSelect = (artistId: string) => {
+    setSelectedArtistId(artistId);
+    setEntityDisplay('artist');
   };
 
   return (
@@ -79,11 +86,11 @@ function App() {
               <>
                 {entityDisplay === 'artist' && (
                   // pass in onGallerySelect for 'more from gallery' link
-                  <ArtistList ArtistsData={artists} onGallerySelect={onGallerySelect} />
+                  <ArtistList ArtistsData={artists} onGallerySelect={onGallerySelect} initialArtistId={selectedArtistId} />
                 )}
                 {entityDisplay === 'gallery' && (
                   // pass in galleryId for 'more from gallery' link 
-                  <GalleryList GalleryData={galleries} initialGalleryId={selectedGalleryId} />
+                  <GalleryList GalleryData={galleries} initialGalleryId={selectedGalleryId} onArtistSelect={onArtistSelect} />
                 )}
                 {entityDisplay === 'home' && <Home onClick={() => setEntityDisplay('artist')} />}
               </>
