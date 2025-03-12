@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Artwork, Gallery } from '../types';
-import { getArtworksByGallery, getArtworksByArtist } from '../db';
+import { getArtworksByGallery } from '../db';
 import { Icon } from './Icons';
 import { ArtworkList } from './ArtworkList';
 import { useMap } from '../context/MapContext';
@@ -21,8 +21,6 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
     const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(initialGalleryId);
 
     const [artworks, setArtworks] = useState<Artwork[]>([]);
-
-    // console.log(" :: selectedArtistId :: ", selectedArtistId)
 
     const filteredGalleries = selectedGalleryId
         ? data.filter((gallery) => gallery.galleryId === selectedGalleryId)
@@ -68,8 +66,7 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                     <p>{selectedGallery.countryTitle}</p>
                 </div>
             ) : (
-
-                <div className={`gallery-list ${selectedGalleryId ? "" : "full-height"}`} ref={galleryListRef}>
+                <div className={`list ${selectedGalleryId ? "" : "full-height"}`} ref={galleryListRef}>
                     <input
                         type="text"
                         placeholder="Search galleries"
@@ -89,13 +86,30 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                             .map((gallery: Gallery) => (
                                 <div
                                     key={gallery.galleryId}
-                                    className="gallery-item"
+                                    className="list-item"
                                     onClick={() => {
                                         handleGalleryClick(gallery.galleryId);
                                         showGalleryOnMap(gallery.galleryLat, gallery.galleryLon);
                                     }}
                                 >
-                                    <p className="gallery-title"><Icon icon="gallery" /> {gallery.galleryTitle}</p>
+                                    <div className="list-image">
+                                        <Icon icon="gallery" className='list-svg' />
+                                    </div>
+                                    <p className="list-title">
+                                        {gallery.galleryTitle}
+                                    </p>
+                                    {/* {selectedGalleryId === gallery.galleryId && (
+                                        <div className="close-icon-right">
+                                            <Icon
+                                                icon="close"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedGalleryId(null);
+                                                }}
+                                            />
+                                        </div>
+                                    )} */}
+
                                 </div>
                             ))
                     )}

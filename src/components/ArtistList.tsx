@@ -53,59 +53,6 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
 
     return (
         <div>
-            {/* <div className={`artist-list ${selectedArtistId ? "" : "full-height"}`} ref={artistListRef}>
-                <input
-                    type="text"
-                    placeholder="Search artists"
-                    className="search-input"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onFocus={() => {
-                        setSelectedArtistId(null);
-                        setArtworks([]);
-                    }}
-                />
-                {filteredArtists.length === 0 ? (
-                    <p>No artist data found.</p>
-                ) : (
-                    filteredArtists
-                        .sort((a, b) => a.artistTitle.localeCompare(b.artistTitle))
-                        .map((artist) => (
-                            <div
-                                key={artist.artistId}
-                                className="artist-item"
-                                onClick={() => handleArtistClick(artist.artistId)}
-                            >
-                                <div className="artist-image">
-                                    {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
-                                        <img loading="lazy" src={artist.artistImageUrl} alt={artist.artistTitle} />
-                                    ) : (
-                                        defaultProfileImage
-                                    )}
-                                </div>
-                                <p className="artist-title">
-                                    {artist.artistTitle}
-                                </p>
-
-                                {selectedArtistId === artist.artistId && (
-                                    <div className="close-icon-right">
-                                        <Icon
-                                            icon="close"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setSelectedArtistId(null);
-                                            }}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        ))
-                )}
-            </div>
-
-            {selectedArtistId && (
-                <ArtworkList artworks={artworks} ref={artworkListRef} onGallerySelect={onGallerySelect} />
-            )} */}
 
             <div className={`list ${selectedArtistId ? "" : "full-height"}`} ref={artistListRef}>
                 <input
