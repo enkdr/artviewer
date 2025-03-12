@@ -19,7 +19,7 @@ export default defineConfig({
             options: {
               cacheName: 'image-cache', // Custom cache name
               expiration: {
-                maxEntries: 100, // Keep max 100 images
+                maxEntries: 200, // Keep max 100 images
                 maxAgeSeconds: 60 * 60 * 24 * 30, // Keep images for 30 days
               },
               cacheableResponse: {
