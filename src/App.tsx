@@ -44,9 +44,9 @@ function App() {
 
   const [entityDisplay, setEntityDisplay] = useState<string | null>('home')
 
+
   // from ArtistsList -> ArtworkList -> 'more from gallery' link 
   const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(null);
-
   const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
 
   const onGallerySelect = (galleryId: string) => {
@@ -59,18 +59,25 @@ function App() {
     setEntityDisplay('artist');
   };
 
+  const handleSetEntityDisplay = (display: string | null) => {
+    setEntityDisplay(display);
+    setSelectedGalleryId(null);
+    setSelectedArtistId(null);
+  };
+
+
   return (
     <MapProvider>
       <div className="outer-container">
         <div className="sidebar">
           <ul>
-            <li onClick={() => setEntityDisplay('home')} className={entityDisplay === 'home' ? 'active' : ''}>
+            <li onClick={() => handleSetEntityDisplay('home')} className={entityDisplay === 'home' ? 'active' : ''}>
               <Icon icon="home" />
             </li>
-            <li onClick={() => setEntityDisplay('artist')} className={entityDisplay === 'artist' ? 'active' : ''}>
+            <li onClick={() => handleSetEntityDisplay('artist')} className={entityDisplay === 'artist' ? 'active' : ''}>
               <Icon icon="artist" />
             </li>
-            <li onClick={() => setEntityDisplay('gallery')} className={entityDisplay === 'gallery' ? 'active' : ''}>
+            <li onClick={() => handleSetEntityDisplay('gallery')} className={entityDisplay === 'gallery' ? 'active' : ''}>
               <Icon icon="gallery" />
             </li>
             <li>
