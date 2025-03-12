@@ -84,18 +84,20 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                     {filteredGalleries.length === 0 ? (
                         <p>No gallery data found.</p>
                     ) : (
-                        filteredGalleries.map((gallery: Gallery) => (
-                            <div
-                                key={gallery.galleryId}
-                                className="gallery-item"
-                                onClick={() => {
-                                    handleGalleryClick(gallery.galleryId);
-                                    showGalleryOnMap(gallery.galleryLat, gallery.galleryLon);
-                                }}
-                            >
-                                <p className="gallery-title">{gallery.galleryTitle}</p>
-                            </div>
-                        ))
+                        filteredGalleries
+                            .sort((a, b) => a.galleryTitle.localeCompare(b.galleryTitle))
+                            .map((gallery: Gallery) => (
+                                <div
+                                    key={gallery.galleryId}
+                                    className="gallery-item"
+                                    onClick={() => {
+                                        handleGalleryClick(gallery.galleryId);
+                                        showGalleryOnMap(gallery.galleryLat, gallery.galleryLon);
+                                    }}
+                                >
+                                    <p className="gallery-title"><Icon icon="gallery" /> {gallery.galleryTitle}</p>
+                                </div>
+                            ))
                     )}
                 </div>
             )}

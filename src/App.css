@@ -98,6 +98,74 @@
   margin-bottom: 0.75rem;
 }
 
+.list {
+  min-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 1rem;
+  border-radius: 0.4rem;
+  scrollbar-width: none;
+  position: relative;
+  margin-bottom: 2rem;
+  min-width: 24rem;
+  max-height: 48rem;
+  line-height: 1.4rem;
+  gap: 1.4rem;
+}
+
+.list.full-height,
+.list.full-height {
+  max-height: 60rem;
+}
+
+.list::-webkit-scrollbar,
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.list .list-item {
+  padding: .5rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.625rem;
+  border-radius: .5rem;
+}
+
+.list-item:hover,
+.list-item:hover {
+  background-color: var(--white);
+  cursor: pointer;
+}
+
+.list-image {
+  width: 3.125rem;
+  height: 3.125rem;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-right: 0.625rem;
+}
+
+.list-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.list-title {
+  flex-grow: 1;
+  margin: 0;
+}
+
+.list .close-icon-right {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list.icon {}
+
 .artist-list,
 .gallery-list {
   min-width: 24rem;
@@ -131,15 +199,6 @@
   line-height: 1.4rem;
   gap: 1.4rem;
 }
-
-/* take out eventually */
-/* .artwork-list {
-  flex-wrap: nowrap;
-  gap: 1.4rem;
-  justify-content: flex-start;
-  overflow-x: auto;
-  width: 100%;
-} */
 
 .artist-list::-webkit-scrollbar,
 .artist-list::-webkit-scrollbar {

@@ -12,9 +12,12 @@ interface ArtistListProps {
 
 export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGallerySelect, initialArtistId }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
+
     const artistListRef = useRef<HTMLDivElement>(null);
     const artworkListRef = useRef<HTMLDivElement>(null);
-    // const [selectedArtistId, setSelectedArtistId] = useState<string | null>(null);
+
+    // initialArtistId is passed in from App.tsx which is passed in from Gallery
+    // when 'show more from artist' is clicked
     const [selectedArtistId, setSelectedArtistId] = useState<string | null>(initialArtistId);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
@@ -50,7 +53,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
 
     return (
         <div>
-            <div className={`artist-list ${selectedArtistId ? "" : "full-height"}`} ref={artistListRef}>
+            {/* <div className={`artist-list ${selectedArtistId ? "" : "full-height"}`} ref={artistListRef}>
                 <input
                     type="text"
                     placeholder="Search artists"
@@ -65,42 +68,99 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
                 {filteredArtists.length === 0 ? (
                     <p>No artist data found.</p>
                 ) : (
-                    filteredArtists.map((artist) => (
-                        <div
-                            key={artist.artistId}
-                            className="artist-item"
-                            onClick={() => handleArtistClick(artist.artistId)}
-                        >
-                            <div className="artist-image">
-                                {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
-                                    <img loading="lazy" src={artist.artistImageUrl} alt={artist.artistTitle} />
-                                ) : (
-                                    defaultProfileImage
+                    filteredArtists
+                        .sort((a, b) => a.artistTitle.localeCompare(b.artistTitle))
+                        .map((artist) => (
+                            <div
+                                key={artist.artistId}
+                                className="artist-item"
+                                onClick={() => handleArtistClick(artist.artistId)}
+                            >
+                                <div className="artist-image">
+                                    {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
+                                        <img loading="lazy" src={artist.artistImageUrl} alt={artist.artistTitle} />
+                                    ) : (
+                                        defaultProfileImage
+                                    )}
+                                </div>
+                                <p className="artist-title">
+                                    {artist.artistTitle}
+                                </p>
+
+                                {selectedArtistId === artist.artistId && (
+                                    <div className="close-icon-right">
+                                        <Icon
+                                            icon="close"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedArtistId(null);
+                                            }}
+                                        />
+                                    </div>
                                 )}
                             </div>
-                            <p className="artist-title">
-                                {artist.artistTitle}
-                            </p>
+                        ))
+                )}
+            </div>
 
-                            {selectedArtistId === artist.artistId && (
-                                <div className="close-icon-right">
-                                    <Icon
-                                        icon="close"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setSelectedArtistId(null);
-                                        }}
-                                    />
+            {selectedArtistId && (
+                <ArtworkList artworks={artworks} ref={artworkListRef} onGallerySelect={onGallerySelect} />
+            )} */}
+
+            <div className={`list ${selectedArtistId ? "" : "full-height"}`} ref={artistListRef}>
+                <input
+                    type="text"
+                    placeholder="Search artists"
+                    className="search-input"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onFocus={() => {
+                        setSelectedArtistId(null);
+                        setArtworks([]);
+                    }}
+                />
+                {filteredArtists.length === 0 ? (
+                    <p>No artist data found.</p>
+                ) : (
+                    filteredArtists
+                        .sort((a, b) => a.artistTitle.localeCompare(b.artistTitle))
+                        .map((artist) => (
+                            <div
+                                key={artist.artistId}
+                                className="list-item"
+                                onClick={() => handleArtistClick(artist.artistId)}
+                            >
+                                <div className="list-image">
+                                    {artist.artistImageUrl && artist.artistImageUrl !== "" ? (
+                                        <img loading="lazy" src={artist.artistImageUrl} alt={artist.artistTitle} />
+                                    ) : (
+                                        defaultProfileImage
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                    ))
+                                <p className="list-title">
+                                    {artist.artistTitle}
+                                </p>
+
+                                {selectedArtistId === artist.artistId && (
+                                    <div className="close-icon-right">
+                                        <Icon
+                                            icon="close"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelectedArtistId(null);
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        ))
                 )}
             </div>
 
             {selectedArtistId && (
                 <ArtworkList artworks={artworks} ref={artworkListRef} onGallerySelect={onGallerySelect} />
             )}
+
         </div>
     );
 };
