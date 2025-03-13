@@ -1,0 +1,12 @@
+Artist
+    Select artist
+    Load gallery pins on map (use extents)
+    Hover over artwork - pan to gallery - show gallery card    
+
+
+Artwork 
+    Click on artwork - load in modal - dim background
+
+
+Galleries
+    Add gallery pins to maps

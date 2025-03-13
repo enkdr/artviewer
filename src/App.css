@@ -268,6 +268,10 @@
   color: var(--dark-grey);
 }
 
+.artwork-info .link {
+  margin: .4rem 0;
+}
+
 .gallery-link {
   display: inline-block;
   margin-top: 0.75rem;
