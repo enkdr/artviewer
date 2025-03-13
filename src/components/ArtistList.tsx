@@ -3,6 +3,7 @@ import { Artist, Artwork } from '../types';
 import { defaultProfileImage, Icon } from './Icons';
 import { getArtworksByArtistId } from '../db';
 import { ArtworkList } from './ArtworkList';
+import { useMap } from '../context/MapContext';
 
 interface ArtistListProps {
     ArtistsData: Artist[];
@@ -21,6 +22,8 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
     const [selectedArtistId, setSelectedArtistId] = useState<string | null>(initialArtistId);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
+    const { showArtworkLocations } = useMap()
+
     const filteredArtists = selectedArtistId
         ? data.filter((artist) => artist.artistId === selectedArtistId)
         : data.filter((artist) => artist.artistTitle.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -31,7 +34,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
     }, [searchTerm]);
 
     function updateMap(works: Artwork[]) {
-        console.log("artworks", works);
+        showArtworkLocations(works)
     }
 
     useEffect(() => {

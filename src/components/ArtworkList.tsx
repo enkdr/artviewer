@@ -10,9 +10,7 @@ interface ArtworkListProps {
 
 export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(({ artworks, onGallerySelect, onArtistSelect }, ref) => {
 
-    const { showGalleryOnMapById, showArtworkLocations } = useMap()
-
-    showArtworkLocations(artworks)
+    const { showGalleryOnMapById } = useMap()
 
     return (
         <div className="artwork-list" ref={ref}>

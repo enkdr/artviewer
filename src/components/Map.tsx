@@ -20,8 +20,7 @@ const Map: React.FC = () => {
     const { gallery, artworks } = useMap();
 
     const galleryLayerRef = useRef<VectorLayer<VectorSource> | null>(null);
-
-    console.log(" :: Map :: artworks :: ", artworks)
+    const artworksLayerRef = useRef<VectorLayer<VectorSource> | null>(null);
 
     // Initialize map only once
     useEffect(() => {
@@ -80,6 +79,52 @@ const Map: React.FC = () => {
             galleryLayerRef.current = galleryLayer;
         }
     }, [gallery]);
+
+    useEffect(() => {
+        if (artworks && artworks.length > 0 && mapInstance.current) {
+            const map = mapInstance.current;
+
+            // Remove previous artworks layer if it exists
+            if (artworksLayerRef.current) {
+                map.removeLayer(artworksLayerRef.current);
+            }
+
+            // Create features for each artwork
+            const artworkFeatures = artworks.map((art) =>
+                new Feature({
+                    geometry: new Point(fromLonLat([art.galleryLon, art.galleryLat])),
+                })
+            );
+
+            // Define style for artworks
+            const artworksStyle = new Style({
+                image: new CircleStyle({
+                    radius: 6,
+                    fill: new Fill({ color: '#ff6666' }),
+                    stroke: new Stroke({ color: '#8b0000', width: 2 }),
+                }),
+            });
+
+            // Create vector layer
+            const artworksLayer = new VectorLayer({
+                source: new VectorSource({
+                    features: artworkFeatures,
+                }),
+                style: artworksStyle,
+            });
+
+            // Add layer to map
+            map.addLayer(artworksLayer);
+            artworksLayerRef.current = artworksLayer;
+
+            // Calculate extent and fit view
+            const source = artworksLayer.getSource();
+            const extent = source?.getExtent();
+            if (extent) {
+                map.getView().fit(extent, { padding: [50, 50, 50, 50], maxZoom: 8 });
+            }
+        }
+    }, [artworks]);
 
 
     return <div ref={mapRef} style={{ width: '100%', height: '100%' }} />;
