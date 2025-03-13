@@ -13,15 +13,18 @@ interface GalleryListProps {
 
 export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId, onArtistSelect }) => {
 
-    const { showGalleryOnMapById } = useMap()
-
-    const [searchTerm, setSearchTerm] = useState<string>("");
-    const galleryListRef = useRef<HTMLDivElement>(null);
-    const artworkListRef = useRef<HTMLDivElement>(null);
-    const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(initialGalleryId);
+    const { showGalleryOnMapById } = useMap() // from MapContext
 
     const [artworks, setArtworks] = useState<Artwork[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
+    const galleryListRef = useRef<HTMLDivElement>(null);
+    const artworkListRef = useRef<HTMLDivElement>(null);
+
+    // from artwork list -- show more from ____ gallery
+    const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(initialGalleryId);
+
+    // either use the selected gallery or filter galleries by search term
     const filteredGalleries = selectedGalleryId
         ? data.filter((gallery) => gallery.galleryId === selectedGalleryId)
         : data.filter((gallery) => gallery.galleryTitle.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -33,6 +36,12 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
     }, [searchTerm]);
 
     useEffect(() => {
+        if (artworkListRef.current) {
+            artworkListRef.current.scrollTop = 0;
+        }
+    }, [artworks]);
+
+    useEffect(() => {
         if (selectedGalleryId) {
             const fetchArtworks = async () => {
                 const data = await getArtworksByGalleryId(selectedGalleryId);
@@ -42,11 +51,6 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
         }
     }, [selectedGalleryId]);
 
-    useEffect(() => {
-        if (artworkListRef.current) {
-            artworkListRef.current.scrollTop = 0;
-        }
-    }, [artworks]);
 
     const handleGalleryClick = (galleryId: string) => {
         setSelectedGalleryId(galleryId);
@@ -60,8 +64,10 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
 
             {selectedGalleryId && selectedGallery ? (
                 <div className="selected-gallery-info">
-                    <div className="close-icon-right"><Icon icon="close" onClick={() => setSelectedGalleryId(null)} /> </div>
-                    <h4><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
+                    <div className="selected-gallery-info-header">
+                        <h4 className="selected-gallery-title"><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
+                        <div className="selected-gallery-close-icon"><Icon icon="close" onClick={() => setSelectedGalleryId(null)} /> </div>
+                    </div>
                     <p>{selectedGallery.galleryAddress}</p>
                     <p>{selectedGallery.countryTitle}</p>
                 </div>

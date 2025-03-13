@@ -10,3 +10,7 @@ Artwork
 
 Galleries
     Add gallery pins to maps
+
+
+Mobile notification - send to Artsearcher
+

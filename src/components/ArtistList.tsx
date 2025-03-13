@@ -30,11 +30,16 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
         }
     }, [searchTerm]);
 
+    function updateMap(works: Artwork[]) {
+        console.log("artworks", works);
+    }
+
     useEffect(() => {
         if (selectedArtistId) {
             const fetchArtworks = async () => {
                 const data = await getArtworksByArtistId(selectedArtistId);
                 setArtworks(data);
+                updateMap(data)
             };
             fetchArtworks();
         }

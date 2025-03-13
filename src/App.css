@@ -268,8 +268,8 @@
   color: var(--dark-grey);
 }
 
-.artwork-info .link {
-  margin: .4rem 0;
+.artwork-info p.link {
+  margin-top: 0.5rem;
 }
 
 .gallery-link {
@@ -311,6 +311,16 @@
   padding: 20px;
 }
 
+.selected-gallery-info-header {
+  display: flex;
+  align-self: center;
+  justify-content: space-between;
+}
+
+.selected-gallery-close-icon {
+  align-self: center;
+}
+
 .selected-gallery-info h4 {
   font-size: 1.2rem;
   color: #333;
@@ -327,12 +337,6 @@
 .selected-gallery-info p strong {
   font-weight: 600;
   color: #333;
-}
-
-.close-icon-right {
-  cursor: pointer;
-  display: flex;
-  justify-content: flex-end;
 }
 
 .selected-gallery-info a {

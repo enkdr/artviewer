@@ -5,7 +5,7 @@ import { getGalleryByGalleryId } from '../db';
 type MapContextType = {
     locations: Location[] | null;
     gallery: Gallery | null;
-    updateLocations: (loc: Location[] | Location) => void;
+    showArtworkLocations: (loc: Location[] | Location) => void;
     showGalleryOnMapById: (id: string) => void;
 }
 
@@ -25,13 +25,13 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const [locations, setLocations] = useState<Location[] | null>(null);
     const [gallery, setGallery] = useState<Gallery | null>(null);
 
-    const updateLocations = (loc: Location[] | Location) => {
+    const showArtworkLocations = (loc: Location[] | Location) => {
         setLocations(Array.isArray(loc) ? loc : [loc]);
     }
 
 
     return (
-        <MapContext.Provider value={{ locations, gallery, updateLocations, showGalleryOnMapById }}>
+        <MapContext.Provider value={{ locations, gallery, showArtworkLocations, showGalleryOnMapById }}>
             {children}
         </MapContext.Provider>
     );
