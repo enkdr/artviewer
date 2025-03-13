@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Location, Gallery } from "../types";
+import { Gallery, Artwork } from "../types";
 import { getGalleryByGalleryId } from '../db';
 
 type MapContextType = {
-    locations: Location[] | null;
+    artworks: Artwork[] | null;
     gallery: Gallery | null;
-    showArtworkLocations: (loc: Location[] | Location) => void;
+    showArtworkLocations: (artworks: Artwork[]) => void;
     showGalleryOnMapById: (id: string) => void;
 }
 
@@ -22,16 +22,15 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
     };
 
-    const [locations, setLocations] = useState<Location[] | null>(null);
+    const [artworks, setArtworks] = useState<Artwork[] | null>(null);
     const [gallery, setGallery] = useState<Gallery | null>(null);
 
-    const showArtworkLocations = (loc: Location[] | Location) => {
-        setLocations(Array.isArray(loc) ? loc : [loc]);
+    const showArtworkLocations = (artworks: Artwork[]) => {
+        setArtworks(artworks);
     }
 
-
     return (
-        <MapContext.Provider value={{ locations, gallery, showArtworkLocations, showGalleryOnMapById }}>
+        <MapContext.Provider value={{ artworks, gallery, showArtworkLocations, showGalleryOnMapById }}>
             {children}
         </MapContext.Provider>
     );

@@ -61,11 +61,6 @@ export interface Country {
     countryTitle: string;
 }
 
-export interface Location {
-    lat: number;
-    lon: number;
-}
-
 export const iconPaths = {
     artist: [
         'M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0',
