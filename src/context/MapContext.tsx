@@ -7,7 +7,7 @@ type MapContextType = {
     gallery: Gallery | null;
     showArtworkLocations: (artworks: Artwork[]) => void;
     showGalleryOnMapById: (id: string) => void;
-    // clearMapMarkers: () => void;
+    clearMapMarkers: () => void;
 }
 
 const MapContext = createContext<MapContextType | null>(null);
@@ -30,13 +30,13 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
     };
 
-    // const clearMapMarkers = () => {
-    //     setArtworks(null);
-    //     setGallery(null);
-    // };
+    const clearMapMarkers = () => {
+        setArtworks(null);
+        setGallery(null);
+    };
 
     return (
-        <MapContext.Provider value={{ artworks, gallery, showArtworkLocations, showGalleryOnMapById }}>
+        <MapContext.Provider value={{ artworks, gallery, showArtworkLocations, showGalleryOnMapById, clearMapMarkers }}>
             {children}
         </MapContext.Provider>
     );

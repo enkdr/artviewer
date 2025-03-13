@@ -78,6 +78,11 @@ const Map: React.FC = () => {
             mapInstance.current.addLayer(galleryLayer);
             galleryLayerRef.current = galleryLayer;
         }
+        else if (mapInstance.current && galleryLayerRef.current) {
+            // Clear gallery layer if gallery is null
+            mapInstance.current.removeLayer(galleryLayerRef.current);
+            galleryLayerRef.current = null;
+        }
     }, [gallery]);
 
     useEffect(() => {
@@ -123,6 +128,10 @@ const Map: React.FC = () => {
             if (extent) {
                 map.getView().fit(extent, { padding: [50, 50, 50, 50], maxZoom: 8 });
             }
+        } else if (mapInstance.current && artworksLayerRef.current) {
+            // Clear artworks layer if artworks is null
+            mapInstance.current.removeLayer(artworksLayerRef.current);
+            artworksLayerRef.current = null;
         }
     }, [artworks]);
 

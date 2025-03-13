@@ -22,7 +22,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
     const [selectedArtistId, setSelectedArtistId] = useState<string | null>(initialArtistId);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
 
-    const { showArtworkLocations } = useMap()
+    const { showArtworkLocations, clearMapMarkers } = useMap()
 
     const filteredArtists = selectedArtistId
         ? data.filter((artist) => artist.artistId === selectedArtistId)
@@ -34,6 +34,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
     }, [searchTerm]);
 
     function updateMap(works: Artwork[]) {
+        clearMapMarkers()
         showArtworkLocations(works)
     }
 
@@ -103,6 +104,8 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setSelectedArtistId(null);
+                                                setArtworks([]);
+                                                clearMapMarkers();
                                             }}
                                         />
                                     </div>

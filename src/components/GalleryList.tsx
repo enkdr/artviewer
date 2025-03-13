@@ -13,7 +13,7 @@ interface GalleryListProps {
 
 export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId, onArtistSelect }) => {
 
-    const { showGalleryOnMapById } = useMap() // from MapContext
+    const { showGalleryOnMapById, clearMapMarkers } = useMap() // from MapContext
 
     const [artworks, setArtworks] = useState<Artwork[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -66,7 +66,15 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                 <div className="selected-gallery-info">
                     <div className="selected-gallery-info-header">
                         <h4 className="selected-gallery-title"><a href={selectedGallery.galleryLink} target="_blank" rel="noreferrer">{selectedGallery.galleryTitle}</a></h4>
-                        <div className="selected-gallery-close-icon"><Icon icon="close" onClick={() => setSelectedGalleryId(null)} /> </div>
+                        <div className="selected-gallery-close-icon">
+                            <Icon icon="close"
+                                onClick={() => {
+                                    setSelectedGalleryId(null)
+                                    clearMapMarkers()
+                                    setArtworks([])
+                                }}
+                            />
+                        </div>
                     </div>
                     <p>{selectedGallery.galleryAddress}</p>
                     <p>{selectedGallery.countryTitle}</p>

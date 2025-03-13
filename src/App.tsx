@@ -10,7 +10,6 @@ import { Icon } from './components/Icons'
 import { Home } from './components/Home'
 import { MapProvider } from './context/MapContext'
 
-
 function App() {
 
   // initialise IndexedDB and fetch data OR pull from existing data
@@ -43,7 +42,6 @@ function App() {
   const [galleries, setGalleries] = useState<Gallery[]>([])
 
   const [entityDisplay, setEntityDisplay] = useState<string | null>('home')
-
 
   // from ArtistsList -> ArtworkList -> 'more from gallery' link 
   const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(null);
