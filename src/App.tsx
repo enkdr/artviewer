@@ -83,6 +83,12 @@ function App() {
             </li> */}
           </ul>
         </div>
+
+        <div className="mobile-message">
+          <p>This app is best viewed on a desktop device.<p>
+          </p> For mobile please check out <a href="https://artsearcher.app">Artsearcher.app</a></p>
+        </div>
+
         <div className="inner-container">
           {loading && <Loading message="Loading..." />}
 

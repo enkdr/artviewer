@@ -93,6 +93,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
                                         defaultProfileImage
                                     )}
                                 </div>
+
                                 <p className="list-title">
                                     {artist.artistTitle}
                                 </p>
@@ -111,6 +112,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
                                     </div>
                                 )}
                             </div>
+
                         ))
                 )}
             </div>
