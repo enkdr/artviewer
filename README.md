@@ -2,6 +2,8 @@
 
 A simple web app to showcase artworks from the ArtSearcher API.
 
+[ArtViewer on github pages](https://enkdr.github.io/artviewer/)
+
 ## Getting Started
 
 ### Prerequisites

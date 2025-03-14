@@ -78,9 +78,9 @@ function App() {
             <li onClick={() => handleSetEntityDisplay('gallery')} className={entityDisplay === 'gallery' ? 'active' : ''}>
               <Icon icon="gallery" />
             </li>
-            <li>
+            {/* <li>
               <Icon icon="map" />
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="inner-container">
