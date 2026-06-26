@@ -9,9 +9,10 @@ interface ArtistListProps {
     ArtistsData: Artist[];
     onGallerySelect: (galleryId: string) => void;
     initialArtistId: string | null;
+    artworkCounts?: Map<string, number>;
 }
 
-export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGallerySelect, initialArtistId }) => {
+export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGallerySelect, initialArtistId, artworkCounts }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
 
     const artistListRef = useRef<HTMLDivElement>(null);
@@ -21,6 +22,7 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
     // when 'show more from artist' is clicked
     const [selectedArtistId, setSelectedArtistId] = useState<string | null>(initialArtistId);
     const [artworks, setArtworks] = useState<Artwork[]>([]);
+    const savedScrollRef = useRef(0);
 
     const { showArtworkLocations, clearMapMarkers } = useMap()
 
@@ -55,6 +57,16 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
         }
     }, [artworks]);
 
+    useEffect(() => {
+        if (selectedArtistId) {
+            savedScrollRef.current = artistListRef.current?.scrollTop ?? 0;
+        } else {
+            requestAnimationFrame(() => {
+                if (artistListRef.current) artistListRef.current.scrollTop = savedScrollRef.current;
+            });
+        }
+    }, [selectedArtistId]);
+
     const handleArtistClick = (artistId: string) => {
         setSelectedArtistId(artistId);
         setSearchTerm("");
@@ -64,17 +76,20 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
         <div>
 
             <div className={`list ${selectedArtistId ? "" : "full-height"}`} ref={artistListRef}>
-                <input
-                    type="text"
-                    placeholder="Search artists"
-                    className="search-input"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    onFocus={() => {
-                        setSelectedArtistId(null);
-                        setArtworks([]);
-                    }}
-                />
+                <div className="search-wrapper">
+                    <input
+                        type="text"
+                        placeholder="Search artists"
+                        className="search-input"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onFocus={() => {
+                            setSelectedArtistId(null);
+                            setArtworks([]);
+                            clearMapMarkers();
+                        }}
+                    />
+                </div>
                 {filteredArtists.length === 0 ? (
                     <p>No artist data found.</p>
                 ) : (
@@ -97,6 +112,9 @@ export const ArtistList: React.FC<ArtistListProps> = ({ ArtistsData: data, onGal
                                 <p className="list-title">
                                     {artist.artistTitle}
                                 </p>
+                                {artworkCounts?.has(artist.artistId) && (
+                                    <span className="list-count">{artworkCounts.get(artist.artistId)}</span>
+                                )}
 
                                 {selectedArtistId === artist.artistId && (
                                     <div className="close-icon-right">

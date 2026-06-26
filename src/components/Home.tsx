@@ -1,29 +1,56 @@
 interface HomeProps {
-    onClick: () => void;
+    onNavigate: (section: string) => void;
+    artistCount: number;
+    galleryCount: number;
+    styleCount: number;
+    artworkCount?: number;
 }
 
-export const Home: React.FC<HomeProps> = ({ onClick }) => {
+export const Home: React.FC<HomeProps> = ({ onNavigate, artistCount, galleryCount, styleCount, artworkCount = 0 }) => {
+    const sections = [
+        { key: 'artist', label: 'Artists', count: artistCount },
+        { key: 'gallery', label: 'Galleries', count: galleryCount },
+        { key: 'style', label: 'Styles', count: styleCount },
+    ];
+
     return (
         <div className="home-container">
-            <h1>Welcome to ArtViewer</h1>
-            <p>
-                Discover and explore an extensive collection of artists and their works.
-            </p>
-            <p>
-                Our platform allows you to browse artists, view detailed profiles, and
-                explore galleries.
-            </p>
-            <p>
-                Whether you're an art enthusiast
-                or a casual admirer, ArtViewer brings the world of art to your fingertips.
-            </p>
-            <p>
-                Click on an artist to view their profile, explore their works,
-                and learn more about their creative journey.
-            </p>
-            <div className="buttons">
-                <p className="get-started" onClick={onClick}>Get Started</p>
+            <div className="home-hero">
+                <p className="home-eyebrow">Art Discovery</p>
+                <h1 className="home-title">ArtViewer</h1>
+                <p className="home-subtitle">
+                    Explore galleries and artists from around the world, mapped and curated in one place.
+                </p>
             </div>
-        </div >
+
+            {artworkCount > 0 && (
+                <div className="home-stats">
+                    <div className="home-stat">
+                        <span className="home-stat-number">{artworkCount.toLocaleString()}</span>
+                        <span className="home-stat-label">Artworks</span>
+                    </div>
+                    <div className="home-stat-divider" />
+                    <div className="home-stat">
+                        <span className="home-stat-number">{artistCount.toLocaleString()}</span>
+                        <span className="home-stat-label">Artists</span>
+                    </div>
+                    <div className="home-stat-divider" />
+                    <div className="home-stat">
+                        <span className="home-stat-number">{galleryCount.toLocaleString()}</span>
+                        <span className="home-stat-label">Galleries</span>
+                    </div>
+                </div>
+            )}
+
+            <div className="home-nav">
+                {sections.map(({ key, label, count }) => (
+                    <button key={key} className="home-nav-item" onClick={() => onNavigate(key)}>
+                        <span className="home-nav-label">{label}</span>
+                        {count > 0 && <span className="home-nav-count">{count.toLocaleString()}</span>}
+                        <span className="home-nav-arrow">›</span>
+                    </button>
+                ))}
+            </div>
+        </div>
     );
 }

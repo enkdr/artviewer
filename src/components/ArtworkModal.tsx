@@ -1,4 +1,5 @@
 import { Artwork } from "../types";
+import { useEscapeKey } from "../hooks/useEscapeKey";
 
 interface ArtworkModalProps {
     artwork: Artwork;
@@ -6,6 +7,7 @@ interface ArtworkModalProps {
 }
 
 export const ArtworkModal = ({ artwork, onClose }: ArtworkModalProps) => {
+    useEscapeKey(onClose);
     return (
         <div
             className="modal-overlay"
@@ -23,7 +25,7 @@ export const ArtworkModal = ({ artwork, onClose }: ArtworkModalProps) => {
                 />
                 <h2 className="modal-bold">{artwork.artworkTitle}</h2>
                 <p className="modal-normal">{artwork.artistFirstname} {artwork.artistLastname}</p>
-                <p className="modal-normal">{artwork.artworkMedium} {artwork.artworkYear}</p>
+                <p className="modal-normal">{artwork.artworkMediums?.join(', ')} {artwork.artworkYear}</p>
                 <p className="modal-normal">{artwork.galleryTitle}</p>
             </div>
         </div>

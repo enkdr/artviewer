@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useCallback, useState } from 'react';
 import { Artwork } from "../types";
 import { useMap } from '../context/MapContext';
 import { ArtworkModal } from './ArtworkModal';
@@ -15,6 +15,10 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(
         const { showGalleryOnMapById } = useMap();
 
         const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+        const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+        const handleImageLoad = useCallback((url: string) => {
+            setLoadedImages(prev => new Set(prev).add(url));
+        }, []);
 
         return (
             <div className="artwork-list" ref={ref}>
@@ -25,21 +29,30 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(
                         <div key={artwork.artworkId} className="artwork-card">
                             <div
                                 className="artwork-image-container"
-                                onClick={() => setSelectedArtwork(artwork)} // Open modal on image click
+                                onClick={() => setSelectedArtwork(artwork)}
                             >
+                                {!loadedImages.has(artwork.imageUrl) && (
+                                    <div className="artwork-image-skeleton" />
+                                )}
+                                <img
+                                    aria-hidden="true"
+                                    src={artwork.imageUrl}
+                                    className="artwork-image-blur"
+                                />
                                 <img
                                     loading="lazy"
                                     src={artwork.imageUrl}
                                     alt={artwork.artworkTitle}
                                     className="artwork-image"
+                                    onLoad={() => handleImageLoad(artwork.imageUrl)}
                                 />
                             </div>
                             <div className="artwork-info">
                                 <h3 className="artwork-title">{artwork.artworkTitle}</h3>
                                 <h4>{artwork.artistFirstname} {artwork.artistLastname}</h4>
                                 <p className="artwork-year">{artwork.artworkYear}</p>
-                                <p className="artwork-medium">{artwork.artworkMedium}</p>
-                                <p className="artwork-style">{artwork.artworkStyle}</p>
+                                <p className="artwork-medium">{artwork.artworkMediums?.join(', ')}</p>
+                                <p className="artwork-style">{artwork.artworkStyles?.join(', ')}</p>
                                 <p className="artwork-dimensions">{artwork.artworkDimensions}</p>
                                 <p
                                     className='link'

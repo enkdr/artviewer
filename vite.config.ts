@@ -16,12 +16,12 @@ export default defineConfig({
           {
             // Match all image requests
             urlPattern: ({ request }) => request.destination === 'image',
-            handler: 'CacheFirst', // Use cached image first, fall back to network
+            handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'image-cache', // Custom cache name
+              cacheName: 'image-cache',
               expiration: {
-                maxEntries: 200, // Keep max 100 images
-                maxAgeSeconds: 60 * 60 * 24 * 30, // Keep images for 30 days
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
               },
               cacheableResponse: {
                 statuses: [0, 200], // Cache opaque (CORS) and successful responses

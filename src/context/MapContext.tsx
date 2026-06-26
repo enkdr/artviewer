@@ -5,6 +5,7 @@ import { getGalleryByGalleryId } from '../db';
 type MapContextType = {
     artworks: Artwork[] | null;
     gallery: Gallery | null;
+    viewResetCount: number;
     showArtworkLocations: (artworks: Artwork[]) => void;
     showGalleryOnMapById: (id: string) => void;
     clearMapMarkers: () => void;
@@ -12,10 +13,11 @@ type MapContextType = {
 
 const MapContext = createContext<MapContextType | null>(null);
 
-export const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const MapProvider: React.FC<{ children: React.ReactNode; onGallerySelected?: (gallery: Gallery) => void }> = ({ children, onGallerySelected }) => {
 
     const [artworks, setArtworks] = useState<Artwork[] | null>(null);
     const [gallery, setGallery] = useState<Gallery | null>(null);
+    const [viewResetCount, setViewResetCount] = useState(0);
 
     const showArtworkLocations = (artworks: Artwork[]) => {
         setArtworks(artworks);
@@ -25,6 +27,7 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const gallery = await getGalleryByGalleryId(id);
         if (gallery) {
             setGallery(gallery);
+            onGallerySelected?.(gallery);
         } else {
             console.warn("Gallery not found");
         }
@@ -33,10 +36,11 @@ export const MapProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const clearMapMarkers = () => {
         setArtworks(null);
         setGallery(null);
+        setViewResetCount(c => c + 1);
     };
 
     return (
-        <MapContext.Provider value={{ artworks, gallery, showArtworkLocations, showGalleryOnMapById, clearMapMarkers }}>
+        <MapContext.Provider value={{ artworks, gallery, viewResetCount, showArtworkLocations, showGalleryOnMapById, clearMapMarkers }}>
             {children}
         </MapContext.Provider>
     );

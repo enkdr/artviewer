@@ -9,9 +9,10 @@ interface GalleryListProps {
     GalleryData: Gallery[];
     initialGalleryId: string | null;
     onArtistSelect: (artistId: string) => void;
+    artworkCounts?: Map<string, number>;
 }
 
-export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId, onArtistSelect }) => {
+export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, initialGalleryId, onArtistSelect, artworkCounts }) => {
 
     const { showGalleryOnMapById, clearMapMarkers } = useMap() // from MapContext
 
@@ -21,8 +22,22 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
     const galleryListRef = useRef<HTMLDivElement>(null);
     const artworkListRef = useRef<HTMLDivElement>(null);
 
-    // from artwork list -- show more from ____ gallery
     const [selectedGalleryId, setSelectedGalleryId] = useState<string | null>(initialGalleryId);
+    const savedScrollRef = useRef(0);
+
+    useEffect(() => {
+        if (initialGalleryId) setSelectedGalleryId(initialGalleryId);
+    }, [initialGalleryId]);
+
+    useEffect(() => {
+        if (selectedGalleryId) {
+            savedScrollRef.current = galleryListRef.current?.scrollTop ?? 0;
+        } else {
+            requestAnimationFrame(() => {
+                if (galleryListRef.current) galleryListRef.current.scrollTop = savedScrollRef.current;
+            });
+        }
+    }, [selectedGalleryId]);
 
     // either use the selected gallery or filter galleries by search term
     const filteredGalleries = selectedGalleryId
@@ -81,17 +96,20 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                 </div>
             ) : (
                 <div className={`list ${selectedGalleryId ? "" : "full-height"}`} ref={galleryListRef}>
-                    <input
-                        type="text"
-                        placeholder="Search galleries"
-                        className="search-input"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        onFocus={() => {
-                            setSelectedGalleryId(null);
-                            setArtworks([]);
-                        }}
-                    />
+                    <div className="search-wrapper">
+                        <input
+                            type="text"
+                            placeholder="Search galleries"
+                            className="search-input"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onFocus={() => {
+                                setSelectedGalleryId(null);
+                                setArtworks([]);
+                                clearMapMarkers();
+                            }}
+                        />
+                    </div>
                     {filteredGalleries.length === 0 ? (
                         <p>No gallery data found.</p>
                     ) : (
@@ -112,6 +130,9 @@ export const GalleryList: React.FC<GalleryListProps> = ({ GalleryData: data, ini
                                     <p className="list-title">
                                         {gallery.galleryTitle}
                                     </p>
+                                    {artworkCounts?.has(gallery.galleryId) && (
+                                        <span className="list-count">{artworkCounts.get(gallery.galleryId)}</span>
+                                    )}
                                     {/* {selectedGalleryId === gallery.galleryId && (
                                         <div className="close-icon-right">
                                             <Icon
