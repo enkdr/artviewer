@@ -4,6 +4,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: '/artviewer/',
+  build: {
+    outDir: '/home/raphael/dev/artsearcher/frontend/public/artviewer',
+    emptyOutDir: true,
+  },
   plugins: [
     react(),
     VitePWA({
