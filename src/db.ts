@@ -89,7 +89,7 @@ export async function fetchAndStoreData<T>(
             return;
         }
 
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, { cache: 'no-cache' });
         const rawData = await response.json();
 
         if (typeof rawData !== "object" || rawData === null) {
@@ -155,6 +155,21 @@ export async function getAllGalleries(): Promise<Gallery[]> {
 export async function getAllStyles(): Promise<Style[]> {
     const db = await initDB();
     return db.getAll('styles');
+}
+
+export async function getAllArtworks(): Promise<Artwork[]> {
+    const db = await initDB();
+    return db.getAll('artworks');
+}
+
+export async function clearCache(): Promise<void> {
+    const db = await initDB();
+    for (const config of fetchEntityData) {
+        localStorage.removeItem(`artviewer_last_fetch_${config.key}`);
+        const tx = db.transaction(config.key, 'readwrite');
+        await tx.objectStore(config.key).clear();
+        await tx.done;
+    }
 }
 
 export async function getArtworksByArtistId(artistId: string): Promise<Artwork[]> {

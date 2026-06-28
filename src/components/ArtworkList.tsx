@@ -7,10 +7,11 @@ interface ArtworkListProps {
     artworks: Artwork[];
     onGallerySelect?: (galleryId: string) => void;
     onArtistSelect?: (artistId: string) => void;
+    className?: string;
 }
 
 export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(
-    ({ artworks, onGallerySelect, onArtistSelect }, ref) => {
+    ({ artworks, onGallerySelect, onArtistSelect, className }, ref) => {
 
         const { showGalleryOnMapById } = useMap();
 
@@ -21,7 +22,7 @@ export const ArtworkList = forwardRef<HTMLDivElement, ArtworkListProps>(
         }, []);
 
         return (
-            <div className="artwork-list" ref={ref}>
+            <div className={`artwork-list${className ? ` ${className}` : ''}`} ref={ref}>
                 {artworks.length === 0 ? (
                     <p className='no-artworks-message'>No {onGallerySelect ? 'artworks' : 'gallery artworks'} found</p>
                 ) : (

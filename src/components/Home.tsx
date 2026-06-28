@@ -8,6 +8,7 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> = ({ onNavigate, artistCount, galleryCount, styleCount, artworkCount = 0 }) => {
     const sections = [
+        { key: 'artwork', label: 'Artworks', count: artworkCount },
         { key: 'artist', label: 'Artists', count: artistCount },
         { key: 'gallery', label: 'Galleries', count: galleryCount },
         { key: 'style', label: 'Styles', count: styleCount },

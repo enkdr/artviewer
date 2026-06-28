@@ -7,8 +7,10 @@ import { Loading } from './components/Loading'
 import { ArtistList } from './components/ArtistList'
 import { GalleryList } from './components/GalleryList'
 import { StyleList } from './components/StyleList'
+import { ArtworkBrowser } from './components/ArtworkBrowser'
 import { Icon } from './components/Icons'
 import { Home } from './components/Home'
+import { Settings } from './components/Settings'
 import { MapProvider } from './context/MapContext'
 import { GalleryMapPopup } from './components/GalleryMapPopup'
 
@@ -94,6 +96,9 @@ function App() {
             <li onClick={() => handleSetEntityDisplay('home')} className={entityDisplay === 'home' ? 'active' : ''}>
               <Icon icon="home" />
             </li>
+            <li onClick={() => handleSetEntityDisplay('artwork')} className={entityDisplay === 'artwork' ? 'active' : ''}>
+              <Icon icon="artwork" />
+            </li>
             <li onClick={() => handleSetEntityDisplay('artist')} className={entityDisplay === 'artist' ? 'active' : ''}>
               <Icon icon="artist" />
             </li>
@@ -102,6 +107,11 @@ function App() {
             </li>
             <li onClick={() => handleSetEntityDisplay('style')} className={entityDisplay === 'style' ? 'active' : ''}>
               <Icon icon="style" />
+            </li>
+          </ul>
+          <ul className="sidebar-bottom">
+            <li onClick={() => handleSetEntityDisplay('settings')} className={`sidebar-settings${entityDisplay === 'settings' ? ' active' : ''}`}>
+              <Icon icon="settings" />
             </li>
           </ul>
         </div>
@@ -117,6 +127,12 @@ function App() {
           <div className="left-section">
             {!loading && !error && (
               <div key={entityDisplay} className="view-fade">
+                {entityDisplay === 'artwork' && (
+                  <ArtworkBrowser
+                    onGallerySelect={onGallerySelect}
+                    onArtistSelect={onArtistSelect}
+                  />
+                )}
                 {entityDisplay === 'artist' && (
                   <ArtistList
                     ArtistsData={artists}
@@ -141,6 +157,7 @@ function App() {
                     onArtistSelect={onArtistSelect}
                   />
                 )}
+                {entityDisplay === 'settings' && <Settings />}
                 {entityDisplay === 'home' && (
                   <Home
                     onNavigate={setEntityDisplay}
