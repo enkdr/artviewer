@@ -18,6 +18,43 @@ export default defineConfig({
         // Runtime caching for dynamic images (e.g., fetched over the network)
         runtimeCaching: [
           {
+            // Basemap style + TileJSON: unversioned URLs that point at the current
+            // planet build, so prefer fresh copies and fall back to cache offline
+            urlPattern: ({ url }) =>
+              url.host === 'tiles.openfreemap.org' &&
+              (url.pathname.startsWith('/styles/') || url.pathname === '/planet'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'basemap-style-cache',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [200],
+              },
+            },
+          },
+          {
+            // Basemap vector tiles, glyphs and sprites: versioned/immutable URLs
+            urlPattern: ({ url }) =>
+              url.host === 'tiles.openfreemap.org' &&
+              /^\/(planet\/[^/]+|fonts|sprites)\//.test(url.pathname),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'basemap-tile-cache',
+              expiration: {
+                maxEntries: 1500,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+                purgeOnQuotaError: true,
+              },
+              cacheableResponse: {
+                statuses: [200],
+              },
+            },
+          },
+          {
             // Match all image requests
             urlPattern: ({ request }) => request.destination === 'image',
             handler: 'StaleWhileRevalidate',

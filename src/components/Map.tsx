@@ -2,8 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import 'ol/ol.css';
 import { Map as OLMap } from 'ol';
 import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import XYZ from 'ol/source/XYZ';
+import { MapboxVectorLayer } from 'ol-mapbox-style';
 import { useMap } from '../context/MapContext';
 import { fromLonLat } from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
@@ -25,6 +24,10 @@ interface MapProps {
 const PIN_COLOR = '#56b8f1';
 const PIN_COLOR_SELECTED = '#d9fbff';
 const PIN_STROKE = '#03123c';
+
+// Keyless vector basemap (OpenFreeMap Positron); attribution comes from the style's TileJSON
+const BASEMAP_STYLE_URL = 'https://tiles.openfreemap.org/styles/positron';
+const BASEMAP_SOURCE = 'openmaptiles'; // style also declares an unused raster source
 
 const Map: React.FC<MapProps> = ({ galleries, onGalleryPinClick, onMoveStart, onEmptyClick }) => {
 
@@ -81,20 +84,18 @@ const Map: React.FC<MapProps> = ({ galleries, onGalleryPinClick, onMoveStart, on
         if (mapRef.current && !mapInstance.current) {
             const map = new OLMap({
                 target: mapRef.current,
-                layers: [new TileLayer({
-                    source: new XYZ({
-                        url: 'https://{a-d}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                        attributions: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
-                    }),
-                })],
+                layers: [new MapboxVectorLayer({ styleUrl: BASEMAP_STYLE_URL, source: BASEMAP_SOURCE })],
                 view: new View({ center: [0, 0], zoom: 2 }),
             });
 
+            // hit-test gallery pins only; skips basemap vector features
+            const pinLayerFilter = { layerFilter: (layer: unknown) => layer === allGalleriesLayerRef.current };
+
             map.on('click', (event) => {
                 const hits: FeatureLike[] = [];
-                map.forEachFeatureAtPixel(event.pixel, (_feature, layer) => {
-                    if (layer === allGalleriesLayerRef.current) hits.push(_feature);
-                });
+                map.forEachFeatureAtPixel(event.pixel, (feature) => {
+                    hits.push(feature);
+                }, pinLayerFilter);
 
                 if (hits.length === 0) {
                     onEmptyClickRef.current?.();
@@ -130,14 +131,13 @@ const Map: React.FC<MapProps> = ({ galleries, onGalleryPinClick, onMoveStart, on
 
             map.on('pointermove', (event) => {
                 let tooltipText = '';
-                map.forEachFeatureAtPixel(event.pixel, (feature, layer) => {
-                    if (layer !== allGalleriesLayerRef.current) return;
+                map.forEachFeatureAtPixel(event.pixel, (feature) => {
                     const members = feature.get('features') as Feature[];
                     tooltipText = members.length === 1
                         ? members[0].get('galleryTitle')
                         : `${members.length} galleries`;
                     return true;
-                });
+                }, pinLayerFilter);
 
                 const el = tooltipRef.current;
                 if (el) {
